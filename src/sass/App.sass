@@ -1,0 +1,268 @@
+$button-color: #007298 
+	
+* 
+	margin: 0 
+	font-family: 'Open Sans' 
+	box-sizing: border-box 
+.default-button
+	height: 50px 
+	background: $button-color
+	gap: 10px 
+	color: white 
+	font-size: 16px 
+	font-weight: 700 
+	line-height: 24px 
+	letter-spacing: 0px 
+	text-align: center 
+	border: none 
+	border-radius: 4px 
+	text-transform: uppercase 
+header
+	height: 80px 
+	background: #FFFFFF 
+	box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.15) 
+	nav 
+		padding: 15px 30px 
+		display: flex 
+		justify-content: space-between 
+.name-logout 
+	display: flex 
+	justify-content: space-between 
+	align-items: center 
+	.name 
+		font-size: 14px 
+		font-weight: 300 
+		line-height: 20px 
+		letter-spacing: 0px 
+		min-width: 85px 
+		min-height: 20px 
+	.logout-button
+		width: 140px
+		padding: 13px 36px 
+body 
+	background: #F7F7F7
+
+.container 
+	width: 1122px 
+	margin: 0 auto 
+	padding-top: 74px 
+	padding-bottom: 242px 
+	position: relative
+
+.cour
+	
+
+.courses
+	&-head
+		display: flex 
+		justify-content: space-between  
+		.search-bar 
+			width: 50% 
+			display: flex 
+			justify-content: space-between 
+			&-input 
+				width: 400px 
+				height: 50px 
+				border: 1px 
+				border-color: #CFCFCF 
+				border-radius: 4px 
+				font-size: 16px 
+				font-weight: 400 
+				line-height: 24px 
+				letter-spacing: 0px 
+				text-align: left 
+				padding: 13px 16px 
+			&-button
+				width: 148px 
+				padding: 13px 43px
+		.add-button
+			width: 186px 
+			padding: 13px 19px
+	.course-card
+		margin-top: 33px
+		padding: 11px 44px 36px 14px
+		min-height: 238px
+		box-shadow: 2px 0px 8px 0px #00000040
+		border-radius: 8px
+		background-color: #F7F7F7
+		border-left: 7px solid #333E48
+		display: flex
+		justify-content: space-between
+		&-left
+			width: 56%
+			&-title
+				padding: 10px
+				font-size: 20px;
+				font-weight: 700;
+				line-height: 32px;
+				letter-spacing: 0px;
+				text-align: left;
+			&-descr
+				padding-left: 10px
+				font-family: Open Sans;
+				font-size: 16px;
+				font-weight: 400;
+				line-height: 20px;
+				letter-spacing: 0px;
+				text-align: left;
+		&-right
+			width: 31%
+			display: flex
+			flex-direction: column
+			justify-content: space-between
+			&-info
+				margin-top: 52px
+				&-authors
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					overflow: hidden;
+
+					&:before
+						content: 'Authors: '
+						font-weight: 700
+				&-duration
+					&:before
+						content: 'Duration: '
+						font-weight: 700
+					&:after
+						content: ' hours'
+				&-created
+					&:before
+						content: 'Created: '
+						font-weight: 700
+			&-buttons
+				display: flex
+				justify-content: space-between
+				.trash-button
+					background: $button-color url('assets/trash.png') no-repeat center center
+					width: 61px
+				.edit-button
+					background: $button-color url('assets/edit.png') no-repeat center center
+					width: 61px
+				.show-button
+					width: 180px
+.empty-list
+	position: absolute
+	top: 50%
+	left: 50%
+	transform: translateX(-50%);
+	&-title
+		font-size: 32px;
+		font-weight: 700;
+		line-height: 40px;
+		letter-spacing: 0px;
+		text-align: center;
+		color: #333E48;
+		text-transform: capitalize
+	&-descr
+		margin-top: 24px
+		font-size: 16px;
+		font-weight: 400;
+		line-height: 20px;
+		letter-spacing: 0px;
+		text-align: center;
+	&-add-button
+		display: block
+		margin: 0 auto
+		margin-top: 40px
+		min-width: 233px
+		font-size: 16px;
+		font-weight: 700;
+		line-height: 24px;
+		letter-spacing: 0px;
+		text-align: center;
+.course-info
+	padding-top: px
+	&-title
+		font-size: 32px;
+		font-weight: 700;
+		line-height: 40px;
+		letter-spacing: 0px;
+		text-align: left;
+	&-block
+		display: flex
+		position: relative
+		justify-content: space-between
+		margin-top: 23px
+		padding: 53px 64px 77px 64px
+		background-color: #FFFFFF
+		border: 1px solid #CFCFCF
+		border-radius: 4px
+		&-left
+			width: 43%
+			&-title
+				font-size: 20px;
+				font-weight: 700;
+				line-height: 20px;
+				letter-spacing: 0px;
+				text-align: left;
+			&-descr
+				margin-top: 25px
+				font-size: 16px;
+				font-weight: 400;
+				line-height: 20px;
+				letter-spacing: 0px;
+				text-align: left;
+		&-delimiter
+			width: 1px
+			height: 54%
+			background-color: #CFCFCF
+			position: absolute
+			left: 50%
+			top: 20%
+		&-right
+			width: 43%
+			margin-top: 43px
+			display: flex
+			&-names
+				width: 27%
+				font-size: 20px;
+				font-weight: 700;
+				line-height: 32px;
+				letter-spacing: 0px;
+				text-align: left;
+				&-id ~ div
+					margin-top: 16px
+			&-values
+				width: 73%
+				font-size: 16px;
+				font-weight: 400;
+				line-height: 20px;
+				letter-spacing: 0px;
+				text-align: left;
+				padding-top: 6px 
+				&-id ~ div
+					margin-top: 28px
+				&-authors
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					overflow: hidden;
+				&-duration
+					font-size: 16px;
+					font-weight: 700;
+					line-height: 20px;
+					letter-spacing: 0px;
+					text-align: left;
+					&:after
+						content: ' hours'
+						font-family: Open Sans;
+						font-size: 16px;
+						font-weight: 400;
+						line-height: 20px;
+						letter-spacing: 0px;
+						text-align: left;
+	&-button
+		margin-top: 46px
+		width: 185px
+		float: right
+
+
+
+
+
+
+
+
+
+
+
