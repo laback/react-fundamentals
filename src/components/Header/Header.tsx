@@ -3,19 +3,11 @@ import { Logo } from './components/Logo/Logo';
 import { Button } from 'src/common/Button/Button';
 import logo from '../../assets/logo.png';
 
-const handleLogout = () => {
-	alert('You are trying to logout');
-};
+const logoSrc = logo;
+const alt = 'logo';
 
-const mockedLogo = {
-	src: logo,
-	alt: 'logo',
-};
-const mockedLogoutButton = {
-	buttonText: 'logout',
-	onClick: handleLogout,
-	buttonClass: 'logout-button',
-};
+const buttonText = 'logout';
+const buttonClass = 'logout-button';
 
 const name = 'Bulka';
 
@@ -23,11 +15,11 @@ const Header = () => {
 	return (
 		<header>
 			<nav>
-				<Logo logo={mockedLogo} />
+				<Logo src={logoSrc} alt={alt} />
 
 				<div className='name-logout'>
 					<div className='name'>{name}</div>
-					<Button button={mockedLogoutButton} />
+					<Button text={buttonText} className={buttonClass} />
 				</div>
 			</nav>
 		</header>

@@ -3,12 +3,10 @@ import { Button } from 'src/common/Button/Button';
 import dayjs from 'dayjs';
 import { toHoursAndMinutes } from 'src/constants';
 
-const CourseInfo = (props) => {
-	const courseInfo = props.courseInfo;
-	const mockedBackButton = {
-		buttonClass: 'course-info-button',
-		buttonText: 'back',
-	};
+const buttonClass = 'course-info-button';
+const buttonText = 'back';
+
+const CourseInfo = ({ courseInfo, onBackToCoursesAction }) => {
 	return (
 		<div className='course-info'>
 			<h3 className='course-info-title'>{courseInfo.title}</h3>
@@ -44,16 +42,16 @@ const CourseInfo = (props) => {
 							{dayjs(new Date(courseInfo.creationDate)).format('MM.DD.YYYY')}
 						</div>
 						<div className='course-info-block-right-values-authors'>
-							{courseInfo.authors
-								.map((author) => {
-									return author.name;
-								})
-								.join(', ')}
+							{courseInfo.authors.join(', ')}
 						</div>
 					</div>
 				</div>
 			</div>
-			<Button button={mockedBackButton} onClick={() => props.backAction()} />
+			<Button
+				className={buttonClass}
+				text={buttonText}
+				onClick={() => onBackToCoursesAction()}
+			/>
 		</div>
 	);
 };

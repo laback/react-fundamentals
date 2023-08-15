@@ -2,26 +2,18 @@ import React from 'react';
 import { Button } from 'src/common/Button/Button';
 import { Input } from 'src/common/Input/Input';
 
-const handleSearch = () => {
-	alert('You are trying to search');
-};
+const type = 'text';
+const placeholder = 'Input text';
+const inputClass = 'search-bar-input';
 
-const input = {
-	type: 'text',
-	placeholder: 'Input text',
-	inputClass: 'search-bar-input',
-};
-const button = {
-	buttonText: 'search',
-	onClick: handleSearch,
-	buttonClass: 'search-bar-button',
-};
+const buttonText = 'search';
+const buttonClass = 'search-bar-button';
 
 const SearchBar = () => {
 	return (
 		<div className='search-bar'>
-			<Input input={input} />
-			<Button button={button} />
+			<Input placeholder={placeholder} type={type} className={inputClass} />
+			<Button className={buttonClass} text={buttonText} />
 		</div>
 	);
 };

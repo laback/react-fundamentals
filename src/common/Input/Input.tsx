@@ -1,14 +1,7 @@
 import React from 'react';
 
-const Input = (props) => {
-	const input = props.input;
-	return (
-		<input
-			type={input.type}
-			placeholder={input.placeholder}
-			className={input.inputClass}
-		/>
-	);
+const Input = ({ type, placeholder, className }) => {
+	return <input type={type} placeholder={placeholder} className={className} />;
 };
 
 export { Input };

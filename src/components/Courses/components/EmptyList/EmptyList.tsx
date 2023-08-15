@@ -1,15 +1,8 @@
 import React from 'react';
 import { Button } from 'src/common/Button/Button';
 
-const handleAddNewCourse = () => {
-	alert('You are trying to add new course');
-};
-
-const mockedAddButton = {
-	buttonText: 'add new course',
-	onClick: handleAddNewCourse,
-	buttonClass: 'empty-list-add-button',
-};
+const buttonText = 'add new course';
+const buttonClass = 'empty-list-add-button';
 
 const EmptyList = () => {
 	return (
@@ -18,7 +11,7 @@ const EmptyList = () => {
 			<div className='empty-list-descr'>
 				Please use ’Add New Course’ button to add your first course
 			</div>
-			<Button button={mockedAddButton} />
+			<Button text={buttonText} className={buttonClass} />
 		</div>
 	);
 };

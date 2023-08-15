@@ -3,22 +3,26 @@ import { CourseCard } from './components/CourseCard/CourseCard';
 import { Button } from 'src/common/Button/Button';
 import { SearchBar } from './components/SearchBar/SearchBar';
 
-const mockedAddButton = {
-	buttonText: 'add new course',
-	buttonClass: 'add-button',
-};
+const buttonText = 'add new course';
+const buttonClass = 'add-button';
 
-const Courses = (props) => {
+const Courses = ({ courses, onShowCourseAction }) => {
 	const body = [];
-	props.courses.map((course) => {
-		body.push(<CourseCard course={course} changeState={props.changeState} />);
+	courses.map((course) => {
+		body.push(
+			<CourseCard
+				key={course.id}
+				course={course}
+				onShowCourseAction={onShowCourseAction}
+			/>
+		);
 	});
 
 	return (
 		<div className='courses'>
 			<div className='courses-head'>
 				<SearchBar />
-				<Button button={mockedAddButton} />
+				<Button text={buttonText} className={buttonClass} />
 			</div>
 			{body}
 		</div>

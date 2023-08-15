@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Logo = (props) => {
-	return <img className='logo-img' src={props.logo.src} alt={props.logo.alt} />;
+const Logo = ({ src, alt }) => {
+	return <img className='logo-img' src={src} alt={alt} />;
 };
 
 export { Logo };

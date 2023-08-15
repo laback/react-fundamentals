@@ -3,21 +3,14 @@ import { Button } from 'src/common/Button/Button';
 import dayjs from 'dayjs';
 import { toHoursAndMinutes } from 'src/constants';
 
-const mockedShowButton = {
-	buttonClass: 'show-button',
-	buttonText: 'Show Course',
-};
+const showButtonClass = 'show-button';
+const showButtonText = 'show course';
 
-const mockedTrashButton = {
-	buttonClass: 'trash-button',
-};
+const trashButtonClass = 'trash-button';
 
-const mockedEditButton = {
-	buttonClass: 'edit-button',
-};
+const editButtonClass = 'edit-button';
 
-const CourseCard = (props) => {
-	const course = props.course;
+const CourseCard = ({ course, onShowCourseAction }) => {
 	return (
 		<div className='course-card'>
 			<div className='course-card-left'>
@@ -27,11 +20,7 @@ const CourseCard = (props) => {
 			<div className='course-card-right'>
 				<div className='course-card-right-info'>
 					<div className='course-card-right-info-authors'>
-						{course.authors
-							.map((author) => {
-								return author.name;
-							})
-							.join(', ')}
+						{course.authors.join(', ')}
 					</div>
 					<div className='course-card-right-info-duration'>
 						{toHoursAndMinutes(course.duration)}
@@ -42,11 +31,12 @@ const CourseCard = (props) => {
 				</div>
 				<div className='course-card-right-buttons'>
 					<Button
-						button={mockedShowButton}
-						onClick={() => props.changeState(course)}
+						text={showButtonText}
+						className={showButtonClass}
+						onClick={() => onShowCourseAction(course.id)}
 					/>
-					<Button button={mockedTrashButton} />
-					<Button button={mockedEditButton} />
+					<Button className={trashButtonClass} />
+					<Button className={editButtonClass} />
 				</div>
 			</div>
 		</div>
