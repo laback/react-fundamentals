@@ -1,26 +1,55 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Logo } from './components/Logo/Logo';
 import { Button } from 'src/common/Button/Button';
 import logo from '../../assets/logo.png';
+import { LoggedInContext } from 'src/App';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const logoSrc = logo;
 const alt = 'logo';
 
-const buttonText = 'logout';
-const buttonClass = 'logout-button';
+const logoutButtonText = 'logout';
+const logoutButtonClass = 'logout-button';
 
-const name = 'Bulka';
+const loginButtonText = 'login';
+const loginButtonClass = 'login-button';
 
 const Header = () => {
+	const location = useLocation();
+
+	const loggedInUsers = useContext(LoggedInContext).loggedInUsers;
+	const nav = useNavigate();
+	const onLogoutAction = () => {
+		console.log('logout');
+		loggedInUsers.length = 0;
+		nav('/login');
+	};
+
+	let right;
+	if (
+		loggedInUsers.length > 0 &&
+		location.pathname != '/login' &&
+		location.pathname != '/register'
+	) {
+		const loggedInUser = loggedInUsers[0];
+		right = (
+			<div className='name-logout'>
+				<div className='name'>{loggedInUser.name}</div>
+				<Button
+					text={logoutButtonText}
+					className={logoutButtonClass}
+					onClick={() => onLogoutAction()}
+				/>
+			</div>
+		);
+	} else {
+		right = <Button text={loginButtonText} className={loginButtonClass} />;
+	}
 	return (
 		<header>
 			<nav>
 				<Logo src={logoSrc} alt={alt} />
-
-				<div className='name-logout'>
-					<div className='name'>{name}</div>
-					<Button text={buttonText} className={buttonClass} />
-				</div>
+				{right}
 			</nav>
 		</header>
 	);

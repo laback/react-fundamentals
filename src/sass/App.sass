@@ -17,6 +17,39 @@ $button-color: #007298
 	border: none 
 	border-radius: 4px 
 	text-transform: uppercase 
+.default-input
+	border-color: #CFCFCF 
+	border-radius: 4px 
+	border-width: 1px
+	font-size: 16px 
+	font-weight: 400 
+	line-height: 24px 
+	letter-spacing: 0px 
+	text-align: left 
+	padding: 13px 16px
+.default-textarea
+	border-color: #CFCFCF 
+	border-radius: 4px 
+	border-width: 1px
+	font-size: 16px 
+	font-weight: 400 
+	line-height: 24px 
+	letter-spacing: 0px 
+	text-align: left 
+	padding: 13px 16px
+.error-message
+	font-size: 16px
+	font-weight: 400
+	line-height: 20px
+	letter-spacing: 0px
+	color: red
+.big-error-message
+	font-size: 24px
+	font-weight: 700
+	line-height: 20px
+	letter-spacing: 0px
+	color: red
+
 header
 	height: 80px 
 	background: #FFFFFF 
@@ -24,7 +57,9 @@ header
 	nav 
 		padding: 15px 30px 
 		display: flex 
-		justify-content: space-between 
+		justify-content: space-between
+.login-button
+	width: 140px
 .name-logout 
 	display: flex 
 	justify-content: space-between 
@@ -48,10 +83,6 @@ body
 	padding-top: 74px 
 	padding-bottom: 242px 
 	position: relative
-
-.cour
-	
-
 .courses
 	&-head
 		display: flex 
@@ -63,15 +94,6 @@ body
 			&-input 
 				width: 400px 
 				height: 50px 
-				border: 1px 
-				border-color: #CFCFCF 
-				border-radius: 4px 
-				font-size: 16px 
-				font-weight: 400 
-				line-height: 24px 
-				letter-spacing: 0px 
-				text-align: left 
-				padding: 13px 16px 
 			&-button
 				width: 148px 
 				padding: 13px 43px
@@ -255,6 +277,163 @@ body
 		margin-top: 46px
 		width: 185px
 		float: right
+.registration
+	margin-top: 123px
+	&-header
+		text-align: center
+		font-size: 32px;
+		font-weight: 700;
+		line-height: 40px;
+		letter-spacing: 0px;
+	&-form
+		background-color: #FFFFFF
+		min-height: 558px
+		width: 585px
+		margin: 0 auto
+		margin-top: 36px
+		padding: 77px 150px 61px 150px
+		&> *
+			display: flex
+			flex-direction: column
+			margin-bottom: 34px
+		&-label
+			font-size: 16px;
+			font-weight: 700;
+			line-height: 20px;
+			letter-spacing: 0px;
+			text-align: left;
+		&-input
+			width: 286px
+			height: 50px
+		&-button
+			width: 100%
+			padding: 13px 99px
+		&-end
+			font-size: 16px;
+			font-weight: 400;
+			line-height: 20px;
+			letter-spacing: 0px;
+			text-align: center;
+			display: block
+			&-bold
+				font-size: 16px;
+				font-weight: 700;
+				line-height: 20px;
+				letter-spacing: 0px;
+				text-align: center;
+
+.login
+	margin-top: 123px
+	&-header
+		text-align: center
+		font-size: 32px;
+		font-weight: 700;
+		line-height: 40px;
+		letter-spacing: 0px;
+	&-form
+		background-color: #FFFFFF
+		min-height: 558px
+		width: 585px
+		margin: 0 auto
+		margin-top: 36px
+		padding: 77px 150px 61px 150px
+		&> *
+			display: flex
+			flex-direction: column
+			margin-bottom: 34px
+		&-label
+			font-size: 16px;
+			font-weight: 700;
+			line-height: 20px;
+			letter-spacing: 0px;
+			text-align: left;
+		&-input
+			width: 286px
+			height: 50px
+		&-button
+			width: 100%
+			padding: 13px 99px
+		&-end
+			font-size: 16px;
+			font-weight: 400;
+			line-height: 20px;
+			letter-spacing: 0px;
+			text-align: center;
+			display: block
+			&-bold
+				font-size: 16px;
+				font-weight: 700;
+				line-height: 20px;
+				letter-spacing: 0px;
+				text-align: center;
+.edit-create-course
+	&-title
+		font-size: 24px;
+		font-weight: 700;
+		line-height: 32px;
+		letter-spacing: 0px;
+		text-align: left;
+	&-form
+		margin-top: 45px
+		background-color: #FFFFFF 
+		min-height: 825px
+		padding: 42px 80px 76px 80px
+		&> *
+			display: flex
+			flex-direction: column
+		&-head
+			font-size: 24px;
+			font-weight: 700;
+			line-height: 32px;
+			letter-spacing: 0px;
+			text-align: left;
+		&-label
+			font-size: 14px;
+			font-weight: 700;
+			line-height: 20px;
+			letter-spacing: 0px;
+			text-align: left;
+		&-textarea
+			height: 152px
+		&-title
+			margin-top: 24px
+		&-description
+			margin-top: 4px
+		&-additional-info
+			margin-top: 15px
+			&-left
+				.edit-create-course-form-input
+					width: 400px
+				&-duration
+					display: flex
+					flex-direction: column
+					&-inputs
+						align-items: center
+						display: flex
+						&-hours
+							margin-left: 16px
+					&-head
+						font-size: 24px;
+						font-weight: 700;
+						line-height: 32px;
+						letter-spacing: 0px;
+						text-align: left;
+				&-authors
+					margin-top: 15px
+					&-head
+						font-size: 24px;
+						font-weight: 700;
+						line-height: 32px;
+						letter-spacing: 0px;
+						text-align: left;
+
+
+
+
+
+
+
+
 
 
 

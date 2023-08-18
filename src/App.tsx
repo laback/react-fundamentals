@@ -1,15 +1,29 @@
 import React from 'react';
 import { Header } from './components/Header/Header';
 import './App.css';
+
 import { Container } from './components/Container/Container';
-import { mockedAuthorsList, mockedCoursesList } from './constants';
+
+import {
+	mockedCoursesList,
+	mockedAuthorsList,
+	loggedInUsers,
+} from './constants';
+
+export const DataContext = React.createContext(null);
+export const LoggedInContext = React.createContext(null);
 
 function App() {
+	console.log(loggedInUsers);
 	return (
-		<>
-			<Header />
-			<Container courses={mockedCoursesList} authors={mockedAuthorsList} />
-		</>
+		<DataContext.Provider
+			value={{ courses: mockedCoursesList, authors: mockedAuthorsList }}
+		>
+			<LoggedInContext.Provider value={{ loggedInUsers: loggedInUsers }}>
+				<Header />
+				<Container />
+			</LoggedInContext.Provider>
+		</DataContext.Provider>
 	);
 }
 

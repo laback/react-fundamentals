@@ -50,6 +50,8 @@ export const mockedAuthorsList = [
 	},
 ];
 
+export const loggedInUsers = [];
+
 export function toHoursAndMinutes(totalMinutes) {
 	const minutes = totalMinutes % 60;
 	const hours = Math.floor(totalMinutes / 60);

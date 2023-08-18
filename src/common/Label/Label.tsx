@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Label = ({ className, text }) => {
-	return <label className={`default-button ${className}`}>{text}</label>;
+	return <label className={className}>{text}</label>;
 };
 
 export { Label };

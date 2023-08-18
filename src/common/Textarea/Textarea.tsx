@@ -1,15 +1,15 @@
 import React from 'react';
 
-const Input = React.forwardRef(
+const Textarea = React.forwardRef(
 	({ type, placeholder, className, name, onChange, value }, ref) => {
 		return (
 			<>
-				<input
+				<textarea
 					ref={ref}
 					name={name}
 					type={type}
 					placeholder={placeholder}
-					className={`default-input ${className}`}
+					className={`default-textarea ${className}`}
 					onChange={(event) => onChange(event)}
 					value={value}
 				/>
@@ -18,4 +18,4 @@ const Input = React.forwardRef(
 	}
 );
 
-export { Input };
+export { Textarea };
