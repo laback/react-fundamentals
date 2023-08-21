@@ -71,6 +71,7 @@ header
 		letter-spacing: 0px 
 		min-width: 85px 
 		min-height: 20px 
+		margin-right: 16px
 	.logout-button
 		width: 140px
 		padding: 13px 36px 
@@ -366,7 +367,15 @@ body
 				line-height: 20px;
 				letter-spacing: 0px;
 				text-align: center;
+.author-item
+	display: flex
+	align-items: center
+	margin-bottom: 16px
+	& > *
+		margin-right: 16px
 .edit-create-course
+	&-button
+		width: 185px
 	&-title
 		font-size: 24px;
 		font-weight: 700;
@@ -401,7 +410,10 @@ body
 			margin-top: 4px
 		&-additional-info
 			margin-top: 15px
+			display: flex
+			flex-direction: row
 			&-left
+				width: 60%
 				.edit-create-course-form-input
 					width: 400px
 				&-duration
@@ -426,8 +438,38 @@ body
 						line-height: 32px;
 						letter-spacing: 0px;
 						text-align: left;
-
-
+					&-inputs
+						margin-bottom: 16px
+						display: flex
+						& > *
+							margin-right: 16px
+					&-list
+						margin-top: 24px
+						.remove-author-button
+							background: white url('assets/trash1.png') no-repeat center center
+							height: 13px
+							width: 13px
+							margin-left: 10px
+			&-right
+				display: flex
+				flex-direction: column
+				justify-content: center
+				margin: 0 auto
+				&-head
+					font-size: 24px;
+					font-weight: 700;
+					line-height: 32px;
+					letter-spacing: 0px;
+				&-list
+					.add-to-course-button
+						height: 25px
+	&-buttons
+		margin-top: 32px
+		display: flex
+		float: right
+		& > *
+			margin-left: 20px
+			width: 185px
 
 
 

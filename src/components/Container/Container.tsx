@@ -1,14 +1,16 @@
 import React, { useContext, useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { LoggedInContext } from 'src/App';
 
 const Container = () => {
-	const loggedInUsers = useContext(LoggedInContext).loggedInUsers;
+	const loggedInUser = useContext(LoggedInContext).loggedInUser;
 	const nav = useNavigate();
-
+	const location = useLocation();
 	useEffect(() => {
-		if (loggedInUsers.length > 0) {
+		if (loggedInUser != undefined) {
 			nav('/courses');
+		} else if (location.pathname.includes('registration')) {
+			nav('/registration');
 		} else {
 			nav('/login');
 		}

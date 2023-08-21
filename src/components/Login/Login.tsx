@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Button } from 'src/common/Button/Button';
 import { Input } from 'src/common/Input/Input';
 import { Label } from 'src/common/Label/Label';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { LoggedInContext } from 'src/App';
 
@@ -15,7 +15,6 @@ const inputClass = 'login-form-input';
 const buttonClass = 'login-form-button';
 
 const Login = () => {
-	const loggedInUsers = useContext(LoggedInContext).loggedInUsers;
 	const [requestErrorMessage, setRequestErrorMessage] = useState(false);
 	const {
 		register,
@@ -34,15 +33,20 @@ const Login = () => {
 
 		const result = await response.json();
 		if (result.successful) {
+			console.log(result);
 			const token = result.result;
-			loggedInUsers.push({
-				token: token,
-				email: result.user.email,
-				name: result.user.name,
-			});
+			localStorage.setItem(
+				'user',
+				JSON.stringify({
+					token: token,
+					email: result.user.email,
+					name: result.user.name,
+				})
+			);
 			setRequestErrorMessage(undefined);
 			nav('/courses');
 		} else {
+			console.log(result);
 			setRequestErrorMessage(result.errors.join('\n'));
 		}
 	};
@@ -91,7 +95,10 @@ const Login = () => {
 				<Button text='login' className={buttonClass} type='submit' />
 				<div className='login-form-end'>
 					If you don't have an account you may
-					<span className='login-form-end-bold'> Register</span>
+					<Link to='/registration' className='login-form-end-bold'>
+						{' '}
+						Register
+					</Link>
 				</div>
 			</form>
 		</div>

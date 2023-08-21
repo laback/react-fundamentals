@@ -20,7 +20,7 @@ root.render(
 					<Route path='courses/add' element={<CreateCourse />} />
 					<Route path='/courses/:courseId' element={<CourseInfo />} />
 					<Route path='/login' element={<Login />} />
-					<Route path='/register' element={<Registration />} />
+					<Route path='/registration' element={<Registration />} />
 				</Route>
 			</Route>
 		</Routes>

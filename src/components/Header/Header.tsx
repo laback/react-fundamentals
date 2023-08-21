@@ -17,21 +17,21 @@ const loginButtonClass = 'login-button';
 const Header = () => {
 	const location = useLocation();
 
-	const loggedInUsers = useContext(LoggedInContext).loggedInUsers;
+	const context = useContext(LoggedInContext);
+	const loggedInUser = context.loggedInUser;
 	const nav = useNavigate();
 	const onLogoutAction = () => {
 		console.log('logout');
-		loggedInUsers.length = 0;
+		localStorage.removeItem('user');
+		console.log(localStorage.getItem('user'));
 		nav('/login');
 	};
-
 	let right;
 	if (
-		loggedInUsers.length > 0 &&
+		loggedInUser != undefined &&
 		location.pathname != '/login' &&
 		location.pathname != '/register'
 	) {
-		const loggedInUser = loggedInUsers[0];
 		right = (
 			<div className='name-logout'>
 				<div className='name'>{loggedInUser.name}</div>

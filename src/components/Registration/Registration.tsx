@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from 'src/common/Button/Button';
 import { Input } from 'src/common/Input/Input';
 import { Label } from 'src/common/Label/Label';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 const labelClass = 'registration-form-label';
@@ -102,7 +102,10 @@ const Registration = () => {
 				<Button text='register' className={buttonClass} type='submit' />
 				<div className='registration-form-end'>
 					If you have an account you may
-					<span className='registration-form-end-bold'> Login</span>
+					<Link to='/login' className='registration-form-end-bold'>
+						{' '}
+						Login
+					</Link>
 				</div>
 			</form>
 		</div>

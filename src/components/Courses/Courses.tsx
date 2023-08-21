@@ -4,6 +4,7 @@ import { Button } from 'src/common/Button/Button';
 import { SearchBar } from './components/SearchBar/SearchBar';
 import { DataContext } from 'src/App';
 import { Outlet, useNavigate } from 'react-router-dom';
+import { EmptyList } from './components/EmptyList/EmptyList';
 
 const buttonText = 'add new course';
 const buttonClass = 'add-button';
@@ -47,15 +48,21 @@ const Courses = () => {
 	return (
 		<>
 			<div className='courses'>
-				<div className='courses-head'>
-					<SearchBar />
-					<Button
-						text={buttonText}
-						onClick={onAddCourseAction}
-						className={buttonClass}
-					/>
-				</div>
-				{body}
+				{body.length > 0 ? (
+					<>
+						<div className='courses-head'>
+							<SearchBar />
+							<Button
+								text={buttonText}
+								onClick={onAddCourseAction}
+								className={buttonClass}
+							/>
+						</div>
+						{body}
+					</>
+				) : (
+					<EmptyList />
+				)}
 			</div>
 		</>
 	);
