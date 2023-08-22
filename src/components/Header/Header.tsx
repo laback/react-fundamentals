@@ -19,11 +19,11 @@ const Header = () => {
 
 	const context = useContext(LoggedInContext);
 	const loggedInUser = context.loggedInUser;
+	const setLoggedInUser = context.setLoggedInUser;
 	const nav = useNavigate();
 	const onLogoutAction = () => {
-		console.log('logout');
 		localStorage.removeItem('user');
-		console.log(localStorage.getItem('user'));
+		setLoggedInUser(undefined);
 		nav('/login');
 	};
 	let right;

@@ -1,21 +1,28 @@
 import React from 'react';
 
-const Input = React.forwardRef(
-	({ type, placeholder, className, name, onChange, value }, ref) => {
-		return (
-			<>
-				<input
-					ref={ref}
-					name={name}
-					type={type}
-					placeholder={placeholder}
-					className={`default-input ${className}`}
-					onChange={(event) => onChange(event)}
-					value={value}
-				/>
-			</>
-		);
-	}
-);
+type InputProps = {
+	type?: 'text' | 'number';
+	placeholder: string;
+	className: string;
+	name?: string;
+	onChange?: (event) => void;
+	value?: string | number;
+};
+
+const Input = React.forwardRef((props: InputProps, ref) => {
+	return (
+		<>
+			<input
+				ref={ref}
+				name={props.name}
+				type={props.type}
+				placeholder={props.placeholder}
+				className={`default-input ${props.className}`}
+				onChange={(event) => props.onChange(event)}
+				value={props.value}
+			/>
+		</>
+	);
+});
 
 export { Input };

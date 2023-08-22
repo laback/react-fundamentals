@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { Header } from './components/Header/Header';
 import './App.css';
+import { DataContextType, LoggedInUserContextType } from 'shared.types';
 
 import { Container } from './components/Container/Container';
 
 import { mockedCoursesList, mockedAuthorsList } from './constants';
 
-export const DataContext = React.createContext(null);
-export const LoggedInContext = React.createContext(null);
+export const DataContext = React.createContext<DataContextType>(null);
+export const LoggedInContext =
+	React.createContext<LoggedInUserContextType>(null);
 
 function App() {
 	const [loggedInUser, setLoggedInUser] = useState(

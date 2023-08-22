@@ -5,6 +5,7 @@ import { Label } from 'src/common/Label/Label';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { LoggedInContext } from 'src/App';
+import { AuthUser } from 'shared.types';
 
 const labelClass = 'login-form-label';
 
@@ -15,6 +16,7 @@ const inputClass = 'login-form-input';
 const buttonClass = 'login-form-button';
 
 const Login = () => {
+	const setUser = useContext(LoggedInContext).setLoggedInUser;
 	const [requestErrorMessage, setRequestErrorMessage] = useState(false);
 	const {
 		register,
@@ -35,14 +37,13 @@ const Login = () => {
 		if (result.successful) {
 			console.log(result);
 			const token = result.result;
-			localStorage.setItem(
-				'user',
-				JSON.stringify({
-					token: token,
-					email: result.user.email,
-					name: result.user.name,
-				})
-			);
+			const user: AuthUser = {
+				token: token,
+				email: result.user.email,
+				name: result.user.name,
+			};
+			localStorage.setItem('user', JSON.stringify(user));
+			setUser(user);
 			setRequestErrorMessage(undefined);
 			nav('/courses');
 		} else {

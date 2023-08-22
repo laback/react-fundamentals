@@ -5,46 +5,21 @@ import { Textarea } from 'src/common/Textarea/Textarea';
 import { toHoursAndMinutes } from 'src/constants';
 import { useForm } from 'react-hook-form';
 import { Button } from 'src/common/Button/Button';
-import { AuthorItem } from './AuthorItem/AuthorItem';
 import { v4 as uuid } from 'uuid';
 import { DataContext } from 'src/App';
 import { useNavigate } from 'react-router-dom';
+import { AuthorInputs } from './AuthorInputs/AuthorInputs';
+import { Course } from 'shared.types';
 
 const labelClass = 'edit-create-course-form-label';
 
 const textareaClass = 'edit-create-course-form-textarea';
 
-const buttonClass = 'edit-create-course-button';
-const trashButtonClass = 'remove-author-button';
-const addButtonClass = 'add-to-course-button';
-
 const inputClass = 'edit-create-course-form-input';
 const placeholder = 'Input text';
 
-let newAuthor;
-let addedAuthorsItems = [];
-let authorsToAddItems = [];
-
-const removeAuthor = (authors, authorId, setAuthors) => {
-	const author = getAuthorById(authors, authorId);
-	const index = authors.indexOf(author, 0);
-	if (index > -1) {
-		authors.splice(index, 1);
-	}
-	setAuthors(authors);
-};
-
-const getAuthorById = (authors, authorId) => {
-	for (const author of authors) {
-		if (author.id == authorId) {
-			return author;
-		}
-	}
-};
-
 const convertDate = (date) => {
 	const splittedDate = date.split('/');
-	console.log(splittedDate);
 	return splittedDate[1] + '/' + splittedDate[0] + '/' + splittedDate[2];
 };
 
@@ -54,14 +29,11 @@ const CreateCourse = () => {
 		register,
 		handleSubmit,
 		watch,
-		resetField,
 		formState: { errors },
 	} = useForm();
 
 	const context = useContext(DataContext);
 	const setCourses = context.setCourses;
-	const authors = context.authors;
-	const setAuthors = context.setAuthors;
 
 	const durationInput = register('durationInput', {
 		required: 'Duration is required',
@@ -91,19 +63,10 @@ const CreateCourse = () => {
 		},
 	});
 
-	const authorInput = register('authorInput', {
-		minLength: {
-			value: 2,
-			message: 'Author name should contains at list 2 characters',
-		},
-	});
-	const authorWatch = watch(authorInput.name);
-
 	const [addedAuthors, setAddedAuthors] = useState([]);
-	const [authorsToAdd, setAuthorsToAdd] = useState(authors);
 
-	const onCreate = (course) => {
-		const newCourse = {
+	const onCreateAction = (course) => {
+		const newCourse: Course = {
 			id: uuid(),
 			title: course.titleInput,
 			duration: course.durationInput,
@@ -119,76 +82,16 @@ const CreateCourse = () => {
 		});
 		nav('/courses');
 	};
-	const onCreateAuthorClick = () => {
-		console.log('hello1');
-		newAuthor = {
-			id: uuid(),
-			name: authorWatch,
-		};
-		setAddedAuthors((prevValue) => {
-			return [...prevValue, newAuthor];
-		});
-		setAuthors((prevValue) => {
-			return [...prevValue, newAuthor];
-		});
-		resetField(authorInput.name);
+
+	const onCancelAction = () => {
+		nav('/courses');
 	};
 
-	const onDeleteAuthorAction = (authorId) => {
-		removeAuthor([...addedAuthors], authorId, setAddedAuthors);
-		setAuthorsToAdd((prevValue) => {
-			return [...prevValue, getAuthorById(authors, authorId)];
-		});
-	};
-
-	const onAddAuthorAction = (authorId) => {
-		removeAuthor([...authorsToAdd], authorId, setAuthorsToAdd);
-		setAddedAuthors((prevValue) => {
-			return [...prevValue, getAuthorById(authors, authorId)];
-		});
-	};
-
-	useEffect(() => {
-		addedAuthorsItems = addedAuthors.map((addedAuthor) => {
-			const deleteButton = (
-				<Button
-					onClick={() => onDeleteAuthorAction(addedAuthor.id)}
-					className={trashButtonClass}
-					type='button'
-				/>
-			);
-			return (
-				<AuthorItem
-					authorId={addedAuthor.id}
-					key={addedAuthor.id}
-					button={deleteButton}
-				/>
-			);
-		});
-
-		authorsToAddItems = authorsToAdd.map((authorsToAdd) => {
-			const deleteButton = (
-				<Button
-					onClick={() => onAddAuthorAction(authorsToAdd.id)}
-					className={addButtonClass}
-					text='add'
-					type='button'
-				/>
-			);
-			return (
-				<AuthorItem
-					authorId={authorsToAdd.id}
-					key={authorsToAdd.id}
-					button={deleteButton}
-				/>
-			);
-		});
-	}, [authors, addedAuthors, authorsToAdd]);
 	return (
 		<div className='edit-create-course'>
 			<h3 className='edit-create-course-title'>Course Edit/Create Page</h3>
 			<form
-				onSubmit={handleSubmit(onCreate)}
+				onSubmit={handleSubmit(onCreateAction)}
 				className='edit-create-course-form'
 			>
 				<div className='edit-create-course-form-head'>Main Info</div>
@@ -242,46 +145,18 @@ const CreateCourse = () => {
 								</div>
 							</div>
 						</div>
-						<div className='edit-create-course-form-additional-info-left-authors'>
-							<div className='edit-create-course-form-additional-info-left-authors-head'>
-								Authors
-							</div>
-							<Label className={labelClass} text='Author name' />
-							<div className='edit-create-course-form-additional-info-left-authors-inputs'>
-								<Input
-									className={inputClass}
-									placeholder={placeholder}
-									{...authorInput}
-								/>
-								<Button
-									text='create author'
-									className={buttonClass}
-									onClick={onCreateAuthorClick}
-									type='button'
-								/>
-							</div>
-							<Label className={labelClass} text='Author List' />
-							<div className='edit-create-course-form-additional-info-left-authors-list'>
-								{addedAuthorsItems}
-							</div>
-						</div>
 					</div>
-					<div className='edit-create-course-form-additional-info-right'>
-						<div className='edit-create-course-form-additional-info-right-head'>
-							Course Authors
-						</div>
-						<div className='edit-create-course-form-additional-info-right-list'>
-							{authorsToAddItems}
-						</div>
-					</div>
+					<AuthorInputs
+						addedAuthors={addedAuthors}
+						setAddedAuthors={setAddedAuthors}
+					/>
 				</div>
 			</form>
 			<div className='edit-create-course-buttons'>
-				<Button text='cancel' />
+				<Button text='cancel' onClick={onCancelAction} />
 				<Button
-					type='submit'
 					text='create course'
-					onClick={handleSubmit((course) => onCreate(course))}
+					onClick={handleSubmit((course) => onCreateAction(course))}
 				/>
 			</div>
 		</div>
