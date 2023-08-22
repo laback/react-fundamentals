@@ -5,7 +5,7 @@ import { Label } from 'src/common/Label/Label';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { LoggedInContext } from 'src/App';
-import { AuthUser } from 'shared.types';
+import { AuthUser } from 'src/shared.types';
 
 const labelClass = 'login-form-label';
 

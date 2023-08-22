@@ -5,7 +5,7 @@ import { AuthorItem } from '../AuthorItem/AuthorItem';
 import { Label } from 'src/common/Label/Label';
 import { Input } from 'src/common/Input/Input';
 import { v4 as uuid } from 'uuid';
-import { Author } from 'shared.types';
+import { Author } from 'src/shared.types';
 
 const buttonClass = 'edit-create-course-button';
 const trashButtonClass = 'remove-author-button';

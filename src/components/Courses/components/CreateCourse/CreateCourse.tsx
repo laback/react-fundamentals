@@ -9,7 +9,7 @@ import { v4 as uuid } from 'uuid';
 import { DataContext } from 'src/App';
 import { useNavigate } from 'react-router-dom';
 import { AuthorInputs } from './AuthorInputs/AuthorInputs';
-import { Course } from 'shared.types';
+import { Course } from 'src/shared.types';
 
 const labelClass = 'edit-create-course-form-label';
 
