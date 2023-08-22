@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Header } from './components/Header/Header';
 import './App.css';
+import { DataContextType, LoggedInUserContextType } from 'shared.types';
+
 import { Container } from './components/Container/Container';
-import { mockedAuthorsList, mockedCoursesList } from './constants';
+
+import { mockedCoursesList, mockedAuthorsList } from './constants';
+
+export const DataContext = React.createContext<DataContextType>(null);
+export const LoggedInContext =
+	React.createContext<LoggedInUserContextType>(null);
 
 function App() {
+	const [loggedInUser, setLoggedInUser] = useState(
+		JSON.parse(localStorage.getItem('user'))
+	);
+	const [courses, setCourses] = useState(mockedCoursesList);
+	const [authors, setAuthors] = useState(mockedAuthorsList);
 	return (
-		<>
-			<Header />
-			<Container courses={mockedCoursesList} authors={mockedAuthorsList} />
-		</>
+		<DataContext.Provider value={{ courses, setCourses, authors, setAuthors }}>
+			<LoggedInContext.Provider value={{ loggedInUser, setLoggedInUser }}>
+				<Header />
+				<Container />
+			</LoggedInContext.Provider>
+		</DataContext.Provider>
 	);
 }
 

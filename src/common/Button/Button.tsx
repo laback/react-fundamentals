@@ -1,9 +1,20 @@
 import React from 'react';
 
-const Button = ({ onClick, className, text }) => {
+type ButtonProps = {
+	onClick?: () => void;
+	className?: string;
+	text?: string;
+	type?: 'button' | undefined;
+};
+
+const Button = (props: ButtonProps) => {
 	return (
-		<button onClick={onClick} className={`default-button ${className}`}>
-			{text}
+		<button
+			type={props.type}
+			onClick={props.onClick}
+			className={`default-button ${props.className}`}
+		>
+			{props.text}
 		</button>
 	);
 };

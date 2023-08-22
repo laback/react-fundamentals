@@ -1,76 +1,26 @@
-import React, { useState, useMemo } from 'react';
-import { Courses } from '../Courses/Courses';
-import { EmptyList } from '../Courses/components/EmptyList/EmptyList';
-import { CourseInfo } from '../CourseInfo/CourseInfo';
+import React, { useContext, useEffect } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { LoggedInContext } from 'src/App';
 
-function replaceAuthorsIds(courses, authors) {
-	return courses.map((course) => {
-		const courseAuthors = course.authors.map((courseAuthorId) => {
-			function findAuthor(author) {
-				return author.id == courseAuthorId;
-			}
-
-			return authors.find(findAuthor).name;
-		});
-		const mappedCourse = {
-			...course,
-			authors: courseAuthors,
-		};
-		return mappedCourse;
-	});
-}
-
-function getCourseById(courses, courseId) {
-	for (const course of courses) {
-		if (course.id === courseId) {
-			return course;
+const Container = () => {
+	const loggedInUser = useContext(LoggedInContext).loggedInUser;
+	const nav = useNavigate();
+	const location = useLocation();
+	useEffect(() => {
+		if (loggedInUser != undefined) {
+			nav('/courses');
+		} else if (location.pathname.includes('registration')) {
+			nav('/registration');
+		} else {
+			nav('/login');
 		}
-	}
-}
+	}, []);
 
-const Container = ({ courses, authors }) => {
-	const mappedCourses = useMemo(
-		() => replaceAuthorsIds(courses, authors),
-		[courses, authors]
+	return (
+		<div className='container'>
+			<Outlet />
+		</div>
 	);
-
-	const [courseId, setCourseId] = useState();
-
-	const handleShowCourseAction = (courseId) => {
-		setCourseId(courseId);
-	};
-
-	const handleBackToCoursesAction = () => {
-		setCourseId(undefined);
-	};
-
-	if (courseId != undefined) {
-		const course = getCourseById(mappedCourses, courseId);
-		console.log(course);
-		return (
-			<div className='container'>
-				<CourseInfo
-					courseInfo={course}
-					onBackToCoursesAction={handleBackToCoursesAction}
-				/>
-			</div>
-		);
-	} else {
-		const isEmpty = mappedCourses.length == 0;
-
-		return (
-			<div className='container'>
-				{isEmpty ? (
-					<EmptyList />
-				) : (
-					<Courses
-						courses={mappedCourses}
-						onShowCourseAction={handleShowCourseAction}
-					/>
-				)}
-			</div>
-		);
-	}
 };
 
 export { Container };

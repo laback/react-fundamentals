@@ -1,6 +1,6 @@
 import React from 'react';
 
-type InputProps = {
+type TextareaProps = {
 	type?: 'text' | 'number';
 	placeholder: string;
 	className: string;
@@ -9,15 +9,15 @@ type InputProps = {
 	value?: string | number;
 };
 
-const Input = React.forwardRef((props: InputProps, ref) => {
+const Textarea = React.forwardRef((props: TextareaProps, ref) => {
 	return (
 		<>
-			<input
+			<textarea
 				ref={ref}
 				name={props.name}
 				type={props.type}
 				placeholder={props.placeholder}
-				className={`default-input ${props.className}`}
+				className={`default-textarea ${props.className}`}
 				onChange={(event) => props.onChange(event)}
 				value={props.value}
 			/>
@@ -25,4 +25,4 @@ const Input = React.forwardRef((props: InputProps, ref) => {
 	);
 });
 
-export { Input };
+export { Textarea };

@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from 'src/common/Button/Button';
 import dayjs from 'dayjs';
 import { toHoursAndMinutes } from 'src/constants';
+import { useNavigate } from 'react-router-dom';
 
 const showButtonClass = 'show-button';
 const showButtonText = 'show course';
@@ -10,7 +11,11 @@ const trashButtonClass = 'trash-button';
 
 const editButtonClass = 'edit-button';
 
-const CourseCard = ({ course, onShowCourseAction }) => {
+const CourseCard = ({ course }) => {
+	const nav = useNavigate();
+	const onShowCourseAction = () => {
+		nav(course.id);
+	};
 	return (
 		<div className='course-card'>
 			<div className='course-card-left'>
@@ -31,9 +36,9 @@ const CourseCard = ({ course, onShowCourseAction }) => {
 				</div>
 				<div className='course-card-right-buttons'>
 					<Button
-						text={showButtonText}
 						className={showButtonClass}
-						onClick={() => onShowCourseAction(course.id)}
+						onClick={() => onShowCourseAction()}
+						text={showButtonText}
 					/>
 					<Button className={trashButtonClass} />
 					<Button className={editButtonClass} />

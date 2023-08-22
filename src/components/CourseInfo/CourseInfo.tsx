@@ -1,12 +1,29 @@
 import React from 'react';
-import { Button } from 'src/common/Button/Button';
+import { useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { toHoursAndMinutes } from 'src/constants';
+import { useMappedCourses } from '../Courses/Courses';
+import { Button } from 'src/common/Button/Button';
 
 const buttonClass = 'course-info-button';
 const buttonText = 'back';
 
-const CourseInfo = ({ courseInfo, onBackToCoursesAction }) => {
+function getCourseById(courseId) {
+	const courses = useMappedCourses();
+	for (const course of courses) {
+		if (course.id == courseId) {
+			return course;
+		}
+	}
+}
+
+const CourseInfo = () => {
+	const courseId = useParams().courseId;
+	const courseInfo = getCourseById(courseId);
+	const nav = useNavigate();
+	const onBackAction = () => {
+		nav(-1);
+	};
 	return (
 		<div className='course-info'>
 			<h3 className='course-info-title'>{courseInfo.title}</h3>
@@ -50,7 +67,7 @@ const CourseInfo = ({ courseInfo, onBackToCoursesAction }) => {
 			<Button
 				className={buttonClass}
 				text={buttonText}
-				onClick={() => onBackToCoursesAction()}
+				onClick={() => onBackAction()}
 			/>
 		</div>
 	);

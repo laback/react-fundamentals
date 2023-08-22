@@ -10,9 +10,18 @@ const buttonText = 'search';
 const buttonClass = 'search-bar-button';
 
 const SearchBar = () => {
+	const mockedOnChange = () => {
+		const a = 1;
+	};
+
 	return (
 		<div className='search-bar'>
-			<Input placeholder={placeholder} type={type} className={inputClass} />
+			<Input
+				placeholder={placeholder}
+				type={type}
+				className={inputClass}
+				onChange={mockedOnChange}
+			/>
 			<Button className={buttonClass} text={buttonText} />
 		</div>
 	);
