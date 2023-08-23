@@ -1,15 +1,21 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input } from 'src/common/Input/Input';
 import { Label } from 'src/common/Label/Label';
 import { Textarea } from 'src/common/Textarea/Textarea';
-import { toHoursAndMinutes } from 'src/constants';
+import { toHoursAndMinutes } from 'src/helper';
 import { useForm } from 'react-hook-form';
 import { Button } from 'src/common/Button/Button';
 import { v4 as uuid } from 'uuid';
-import { DataContext } from 'src/App';
 import { useNavigate } from 'react-router-dom';
 import { AuthorInputs } from './AuthorInputs/AuthorInputs';
 import { Course } from 'src/shared.types';
+import { useDispatch, useSelector } from 'react-redux';
+import { CreateCourse as CreateCourseAction } from 'src/store/course/actions';
+import {
+	getIsAuthorsLoadingStarted,
+	getIsCoursesLoadingStarted,
+} from 'src/store/selectors';
+import { GetAuthors } from 'src/store/author/actions';
 
 const labelClass = 'edit-create-course-form-label';
 
@@ -24,6 +30,11 @@ const convertDate = (date) => {
 };
 
 const CreateCourse = () => {
+	const dispatch = useDispatch<any>();
+	const isAuthorsLoadingStarted = useSelector(getIsAuthorsLoadingStarted);
+	if (!isAuthorsLoadingStarted) {
+		dispatch(GetAuthors());
+	}
 	const nav = useNavigate();
 	const {
 		register,
@@ -31,9 +42,6 @@ const CreateCourse = () => {
 		watch,
 		formState: { errors },
 	} = useForm();
-
-	const context = useContext(DataContext);
-	const setCourses = context.setCourses;
 
 	const durationInput = register('durationInput', {
 		required: 'Duration is required',
@@ -77,9 +85,7 @@ const CreateCourse = () => {
 			}),
 		};
 		console.log(newCourse);
-		setCourses((prevValue) => {
-			return [...prevValue, newCourse];
-		});
+		dispatch(CreateCourseAction(newCourse));
 		nav('/courses');
 	};
 

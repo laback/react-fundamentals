@@ -4,7 +4,7 @@ import './App.css';
 import { Provider } from 'react-redux';
 
 import { Container } from './components/Container/Container';
-import store from './store';
+import { store } from './store';
 
 function App() {
 	return (

@@ -1,19 +1,11 @@
-import { CoursesActionTypes } from './types.js';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { Course } from 'src/shared.types.js';
+import { getCourses } from '../services';
 
-interface SaveCourses {
-	type: CoursesActionTypes.SAVE_COURSES;
-	payload: Course[];
-}
+export const GetCourses = createAsyncThunk('courses/get', async () => {
+	return await getCourses();
+});
 
-interface AddCourse {
-	type: CoursesActionTypes.ADD_COURSE;
-	payload: Course;
-}
+export const CreateCourse = createAction<Course>('courses/create');
 
-interface DeleteCourse {
-	type: CoursesActionTypes.DELETE_COURSE;
-	payload: string;
-}
-
-export type CoursesAction = SaveCourses | AddCourse | DeleteCourse;
+export const DeleteCourse = createAction<string>('courses/delete');

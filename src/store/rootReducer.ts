@@ -1,9 +1,10 @@
-import { combineReducers } from '@reduxjs/toolkit';
+import { asyncAuthorsReducer } from './author/reducer';
+import { asyncCoursesReducer } from './course/reducer';
+import { usersReducer } from './user/reducer';
+import { combineReducers } from 'redux';
 
-import { coursesReducer } from './course/reducer';
-import { authorsReducer } from './author/reducer';
-
-export const rootReducer = combineReducers({
-	courses: coursesReducer,
-	authors: authorsReducer,
-});
+export const rootReducer = {
+	courses: asyncCoursesReducer,
+	authors: asyncAuthorsReducer,
+	user: usersReducer,
+};

@@ -4,6 +4,7 @@ import { Input } from 'src/common/Input/Input';
 import { Label } from 'src/common/Label/Label';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { registerUser } from 'src/store/services';
 
 const labelClass = 'registration-form-label';
 
@@ -14,7 +15,7 @@ const inputClass = 'registration-form-input';
 const buttonClass = 'registration-form-button';
 
 const Registration = () => {
-	const [requestErrorMessage, setRequestErrorMessage] = useState(false);
+	const [requestErrorMessage, setRequestErrorMessage] = useState([]);
 	const {
 		register,
 		handleSubmit,
@@ -22,22 +23,12 @@ const Registration = () => {
 	} = useForm();
 	const nav = useNavigate();
 	const onRegister = async (user) => {
-		console.log(user);
-		const response = await fetch('http://localhost:4000/register', {
-			method: 'POST',
-			body: JSON.stringify(user),
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
-
-		const result = await response.json();
-		console.log(result);
-		if (result.successful) {
+		const result = registerUser(user);
+		if (Array.isArray(result)) {
+			setRequestErrorMessage(result);
+		} else {
 			setRequestErrorMessage(undefined);
 			nav('/login');
-		} else {
-			setRequestErrorMessage(result.errors.join('\n'));
 		}
 	};
 

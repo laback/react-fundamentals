@@ -1,19 +1,37 @@
 import { Author } from 'src/shared.types';
-import { AuthorsAction } from './actions';
-import { AuthorActionTypes } from './types';
+import { createReducer, createSlice } from '@reduxjs/toolkit';
+import { CreateAuthor, GetAuthors } from './actions';
 
-const initAuthorsState = [] as Author[];
+const initAuthorsState = {
+	value: [],
+	isLoadingStarted: false,
+} as { value: Author[]; isLoadingStarted: boolean };
 
-function authorsReducer(state = initAuthorsState, action: AuthorsAction) {
-	switch (action.type) {
-		case AuthorActionTypes.SAVE_AUTHORS:
-			return action.payload;
+// const authorsReducer = createReducer(initAuthorsState, (builder) => {
+// 	builder.addCase(CreateAuthor, (state, action) => {
+// 		state.value = [...state.value, action.payload];
+// 	});
+// });
 
-		case AuthorActionTypes.ADD_AUTHOR:
-			return [...state, action.payload];
-		default:
-			return state;
-	}
-}
+const asyncAuthorsReducer = createSlice({
+	name: 'authors',
+	initialState: initAuthorsState,
+	reducers: {},
+	extraReducers: (builder) => {
+		builder
+			.addCase(GetAuthors.pending, (state: typeof initAuthorsState) => {
+				state.isLoadingStarted = true;
+			})
+			.addCase(
+				GetAuthors.fulfilled,
+				(state: typeof initAuthorsState, action) => {
+					state.value = action.payload;
+				}
+			)
+			.addCase(CreateAuthor, (state, action) => {
+				state.value = [...state.value, action.payload];
+			});
+	},
+}).reducer;
 
-export { initAuthorsState, authorsReducer };
+export { asyncAuthorsReducer };

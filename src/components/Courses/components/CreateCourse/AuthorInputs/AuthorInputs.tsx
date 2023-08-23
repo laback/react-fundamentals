@@ -1,11 +1,13 @@
-import React, { useContext, useState } from 'react';
-import { DataContext } from 'src/App';
+import React, { useState } from 'react';
 import { Button } from 'src/common/Button/Button';
 import { AuthorItem } from '../AuthorItem/AuthorItem';
 import { Label } from 'src/common/Label/Label';
 import { Input } from 'src/common/Input/Input';
 import { v4 as uuid } from 'uuid';
 import { Author } from 'src/shared.types';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAuthors } from 'src/store/selectors';
+import { CreateAuthor } from 'src/store/author/actions';
 
 const buttonClass = 'edit-create-course-button';
 const trashButtonClass = 'remove-author-button';
@@ -32,9 +34,8 @@ const getAuthorById = (authors, authorId) => {
 };
 
 const AuthorInputs = ({ addedAuthors, setAddedAuthors }) => {
-	const context = useContext(DataContext);
-	const authors = context.authors;
-	const setAuthors = context.setAuthors;
+	const dispatch = useDispatch();
+	const authors = useSelector(getAuthors);
 
 	const [authorName, setAuthorName] = useState('');
 
@@ -47,12 +48,11 @@ const AuthorInputs = ({ addedAuthors, setAddedAuthors }) => {
 			id: uuid(),
 			name: authorName,
 		};
+		setAuthorName('');
 		setAddedAuthors((prevValue) => {
 			return [...prevValue, newAuthor];
 		});
-		setAuthors((prevValue) => {
-			return [...prevValue, newAuthor];
-		});
+		dispatch(CreateAuthor(newAuthor));
 	};
 
 	const onDeleteAuthorAction = (authorId) => {

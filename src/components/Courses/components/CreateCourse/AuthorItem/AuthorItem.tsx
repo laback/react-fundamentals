@@ -1,8 +1,9 @@
-import React, { useMemo, useContext } from 'react';
-import { DataContext } from 'src/App';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { getAuthors } from 'src/store/selectors';
 
 const getAuthorById = (authorId) => {
-	const authors = useContext(DataContext).authors;
+	const authors = useSelector(getAuthors);
 
 	for (const author of authors) {
 		if (author.id == authorId) {

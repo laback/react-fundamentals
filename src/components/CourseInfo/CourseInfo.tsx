@@ -1,25 +1,24 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
-import { toHoursAndMinutes } from 'src/constants';
+import { toHoursAndMinutes } from 'src/helper';
 import { useMappedCourses } from '../Courses/Courses';
 import { Button } from 'src/common/Button/Button';
+import { useSelector } from 'react-redux';
+import { getAuthors, getCourses } from 'src/store/selectors';
 
 const buttonClass = 'course-info-button';
 const buttonText = 'back';
 
-function getCourseById(courseId) {
-	const courses = useMappedCourses();
-	for (const course of courses) {
-		if (course.id == courseId) {
-			return course;
-		}
-	}
-}
-
 const CourseInfo = () => {
 	const courseId = useParams().courseId;
-	const courseInfo = getCourseById(courseId);
+	let courseInfo = useSelector(getCourses).find(
+		(course) => courseId === course.id
+	);
+	const authors: string[] = useSelector(getAuthors)
+		.filter((author) => courseInfo.authors.includes(author.id))
+		.map((author) => author.name);
+	courseInfo = { ...courseInfo, authors: authors };
 	const nav = useNavigate();
 	const onBackAction = () => {
 		nav(-1);

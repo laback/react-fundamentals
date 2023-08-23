@@ -1,15 +1,26 @@
-import React, { useMemo, useContext } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { CourseCard } from './components/CourseCard/CourseCard';
 import { Button } from 'src/common/Button/Button';
 import { SearchBar } from './components/SearchBar/SearchBar';
-import { DataContext } from 'src/App';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { EmptyList } from './components/EmptyList/EmptyList';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+	getCourses,
+	getAuthors,
+	getIsCoursesLoadingStarted,
+	getIsAuthorsLoadingStarted,
+} from 'src/store/selectors';
+import { GetCourses } from 'src/store/course/actions';
+import { GetAuthors } from 'src/store/author/actions';
 
 const buttonText = 'add new course';
 const buttonClass = 'add-button';
 
 function replaceAuthorsIds(courses, authors) {
+	if (courses.length == 0 || authors.length == 0) {
+		return [];
+	}
 	return courses.map((course) => {
 		const courseAuthors = course.authors.map((courseAuthorId) => {
 			function findAuthor(author) {
@@ -27,22 +38,39 @@ function replaceAuthorsIds(courses, authors) {
 }
 
 export const useMappedCourses = () => {
-	const { courses, authors } = useContext(DataContext);
+	const courses = useSelector(getCourses);
+	const authors = useSelector(getAuthors);
 	const mappedCourses = useMemo(() => {
 		const mappedCourses = replaceAuthorsIds(courses, authors);
 		return mappedCourses;
 	}, [courses, authors]);
 	return mappedCourses;
+	// const isCoursesLoaded = useSelector(getIsCoursesLoaded);
+	// const isAuthorsLoaded = useSelector(getIsAuthorsLoaded);
+	// if (isAuthorsLoaded && isCoursesLoaded) {
+
+	// }
+	// return [];
 };
 
 const Courses = () => {
+	const dispatch = useDispatch<any>();
+
+	const isCoursesLoadingStarted = useSelector(getIsCoursesLoadingStarted);
+	const isAuthorsLoadingStarted = useSelector(getIsAuthorsLoadingStarted);
+	if (!isCoursesLoadingStarted) {
+		dispatch(GetCourses());
+	}
+	if (!isAuthorsLoadingStarted) {
+		dispatch(GetAuthors());
+	}
 	const nav = useNavigate();
 	const onAddCourseAction = () => {
 		nav('add');
 	};
 	const body = [];
 	useMappedCourses().map((course) => {
-		body.push(<CourseCard key={course.id} course={course} />);
+		body.push(<CourseCard key={course.id} courseId={course.id} />);
 	});
 
 	return (

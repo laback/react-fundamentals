@@ -1,11 +1,8 @@
-import { createStore } from 'redux';
-
 import { rootReducer } from './rootReducer';
-import { initCoursesState } from './course/reducer';
+import { configureStore } from '@reduxjs/toolkit';
 
-const appInitialState = {
-	courses: initCoursesState,
-};
-const store = createStore(rootReducer, appInitialState);
-
-export default store;
+const store = configureStore({
+	reducer: rootReducer,
+});
+type RootState = ReturnType<typeof store.getState>;
+export { store, RootState };

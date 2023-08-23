@@ -1,14 +1,6 @@
-import { UsersActionTypes } from './types.js';
+import { createAction } from '@reduxjs/toolkit';
 import { User } from 'src/shared.types.js';
 
-interface Login {
-	type: UsersActionTypes.LOGIN;
-	payload: User;
-}
+export const Login = createAction<User>('user/login');
 
-interface Logout {
-	type: UsersActionTypes.LOGOUT;
-	payload: User;
-}
-
-export type UsersAction = Login | Logout;
+export const Logout = createAction('user/logout');

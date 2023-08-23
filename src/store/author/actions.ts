@@ -1,14 +1,9 @@
-import { AuthorActionTypes } from './types.js';
-import { Author } from 'src/shared.types.js';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { getAuthors } from '../services';
+import { Author } from 'src/shared.types';
 
-interface SaveAuthors {
-	type: AuthorActionTypes.SAVE_AUTHORS;
-	payload: Author[];
-}
+export const GetAuthors = createAsyncThunk('authors/get', async () => {
+	return await getAuthors();
+});
 
-interface AddAuthor {
-	type: AuthorActionTypes.ADD_AUTHOR;
-	payload: Author[];
-}
-
-export type AuthorsAction = SaveAuthors | AddAuthor;
+export const CreateAuthor = createAction<Author>('authors/create');
