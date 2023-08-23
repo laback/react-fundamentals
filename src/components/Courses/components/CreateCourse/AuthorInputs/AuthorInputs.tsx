@@ -38,21 +38,27 @@ const AuthorInputs = ({ addedAuthors, setAddedAuthors }) => {
 	const authors = useSelector(getAuthors);
 
 	const [authorName, setAuthorName] = useState('');
+	const [errorMessage, setErrorMessage] = useState(undefined);
 
 	const onAuthorNameInputChange = (event) => {
 		setAuthorName(event.target.value);
 	};
 
 	const onCreateAuthorClick = () => {
-		const newAuthor: Author = {
-			id: uuid(),
-			name: authorName,
-		};
-		setAuthorName('');
-		setAddedAuthors((prevValue) => {
-			return [...prevValue, newAuthor];
-		});
-		dispatch(CreateAuthor(newAuthor));
+		if (authorName.length < 2) {
+			setErrorMessage('Author name should contains at least 2 characters');
+		} else {
+			setErrorMessage(undefined);
+			const newAuthor: Author = {
+				id: uuid(),
+				name: authorName,
+			};
+			setAuthorName('');
+			setAddedAuthors((prevValue) => {
+				return [...prevValue, newAuthor];
+			});
+			dispatch(CreateAuthor(newAuthor));
+		}
 	};
 
 	const onDeleteAuthorAction = (authorId) => {
@@ -108,12 +114,16 @@ const AuthorInputs = ({ addedAuthors, setAddedAuthors }) => {
 				</div>
 				<Label className={labelClass} text='Author name' />
 				<div className='edit-create-course-form-additional-info-left-authors-inputs'>
-					<Input
-						className={inputClass}
-						placeholder={placeholder}
-						value={authorName}
-						onChange={(event) => onAuthorNameInputChange(event)}
-					/>
+					<div>
+						<Input
+							className={inputClass}
+							placeholder={placeholder}
+							value={authorName}
+							onChange={(event) => onAuthorNameInputChange(event)}
+						/>
+						<div className='error-message'>{errorMessage}</div>
+					</div>
+
 					<Button
 						text='create author'
 						className={buttonClass}
