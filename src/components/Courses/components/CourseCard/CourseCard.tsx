@@ -3,16 +3,11 @@ import { Button } from 'src/common/Button/Button';
 import dayjs from 'dayjs';
 import { toHoursAndMinutes } from 'src/helper';
 import { useNavigate } from 'react-router-dom';
-import { Author, Course } from 'src/shared.types';
+import { TCourse } from 'src/shared.types';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-	getAuthors,
-	getCourses,
-	getIsAuthorsLoadingStarted,
-	getIsCoursesLoadingStarted,
-} from 'src/store/selectors';
-import { DeleteCourse, GetCourses } from 'src/store/course/actions';
-import { GetAuthors } from 'src/store/author/actions';
+import { DeleteCourse } from 'src/store/course/actions';
+import { useCourseById } from 'src/hooks';
+import { getCourses, getAuthors } from 'src/store/selectors';
 
 const showButtonClass = 'show-button';
 const showButtonText = 'show course';
@@ -23,11 +18,10 @@ const editButtonClass = 'edit-button';
 
 const CourseCard = ({ courseId }) => {
 	const dispatch = useDispatch<any>();
-	let course: Course = useSelector(getCourses).find((c) => c.id === courseId);
-	const authors: string[] = useSelector(getAuthors)
-		.filter((author) => course.authors.includes(author.id))
-		.map((author) => author.name);
-	course = { ...course, authors: authors };
+
+	const courses = useSelector(getCourses);
+	const authors = useSelector(getAuthors);
+	const course: TCourse = useCourseById(courseId, courses, authors);
 	const nav = useNavigate();
 	const onShowCourseAction = () => {
 		nav(course.id);
@@ -35,7 +29,7 @@ const CourseCard = ({ courseId }) => {
 	const onDeleteCourseAction = () => {
 		dispatch(DeleteCourse(courseId));
 	};
-	if (course != undefined) {
+	if (course) {
 		return (
 			<div className='course-card'>
 				<div className='course-card-left'>

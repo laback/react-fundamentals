@@ -1,11 +1,12 @@
-import { Course } from 'src/shared.types';
+import { TCourse } from 'src/shared.types';
 import { createSlice } from '@reduxjs/toolkit';
 import { CreateCourse, DeleteCourse, GetCourses } from './actions';
 
 const initCoursesState = {
 	value: [],
-	isLoadingStarted: false,
-} as { value: Course[]; isLoadingStarted: boolean };
+	isLoaded: false,
+	isLoading: false,
+} as { value: TCourse[]; isLoaded: boolean; isLoading: boolean };
 
 const asyncCoursesReducer = createSlice({
 	name: 'courses',
@@ -14,12 +15,13 @@ const asyncCoursesReducer = createSlice({
 	extraReducers: (builder) => {
 		builder
 			.addCase(GetCourses.pending, (state: typeof initCoursesState) => {
-				state.isLoadingStarted = true;
+				state.isLoading = true;
 			})
 			.addCase(
 				GetCourses.fulfilled,
 				(state: typeof initCoursesState, action) => {
-					state.isLoadingStarted = true;
+					state.isLoaded = true;
+					state.isLoading = false;
 					state.value = action.payload;
 				}
 			)
@@ -27,12 +29,9 @@ const asyncCoursesReducer = createSlice({
 				state.value = [...state.value, action.payload];
 			})
 			.addCase(DeleteCourse, (state, action) => {
-				console.log(state.value, action.payload);
-				const courseToDelete = state.value.find((course) => {
-					course.id === action.payload;
-				});
-				const copiedState = [...state.value];
-				state.value = copiedState.slice(copiedState.indexOf(courseToDelete));
+				state.value = state.value.filter(
+					(course) => course.id != action.payload
+				);
 			});
 	},
 }).reducer;

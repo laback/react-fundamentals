@@ -5,7 +5,7 @@ import logo from '../../assets/logo.png';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Logout } from 'src/store/user/actions';
-import { User } from 'src/shared.types';
+import { TUser } from 'src/shared.types';
 import { getLoggedInUser } from 'src/store/selectors';
 
 const logoSrc = logo;
@@ -20,7 +20,7 @@ const loginButtonClass = 'login-button';
 const Header = () => {
 	const dispatch = useDispatch();
 	const location = useLocation();
-	const loggedInUser: User = useSelector(getLoggedInUser);
+	const loggedInUser: TUser = useSelector(getLoggedInUser);
 	const nav = useNavigate();
 	const onLogoutAction = () => {
 		dispatch(Logout());
@@ -28,7 +28,7 @@ const Header = () => {
 	};
 	let right;
 	if (
-		loggedInUser != undefined &&
+		loggedInUser &&
 		location.pathname != '/login' &&
 		location.pathname != '/register'
 	) {

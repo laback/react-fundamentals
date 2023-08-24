@@ -3,13 +3,13 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'src/common/Button/Button';
 import { getLoggedInUser } from 'src/store/selectors';
-import { User } from 'src/shared.types';
+import { TUser } from 'src/shared.types';
 
 const buttonText = 'add new course';
 const buttonClass = 'empty-list-add-button';
 
 const EmptyList = () => {
-	const loggedInUser: User = useSelector(getLoggedInUser);
+	const loggedInUser: TUser = useSelector(getLoggedInUser);
 	const nav = useNavigate();
 	const onAddAction = () => {
 		nav('add');

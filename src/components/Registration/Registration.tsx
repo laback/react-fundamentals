@@ -41,8 +41,6 @@ const Registration = () => {
 			message: 'Password should contains at list 6 characters',
 		},
 	});
-	// const nameError = errors[nameInput.name];
-	console.log(errors);
 	return (
 		<div className='registration'>
 			<h3 className='registration-header'>Registration</h3>
@@ -58,7 +56,7 @@ const Registration = () => {
 					/>
 					{errors[nameInput.name] && (
 						<span className='error-message'>
-							{errors[nameInput.name].message}
+							{errors[nameInput.name].message as string}
 						</span>
 					)}
 				</div>
@@ -72,7 +70,7 @@ const Registration = () => {
 					/>
 					{errors[emailInput.name] && (
 						<span className='error-message'>
-							{errors[emailInput.name].message}
+							{errors[emailInput.name].message as string}
 						</span>
 					)}
 				</div>
@@ -86,11 +84,11 @@ const Registration = () => {
 					/>
 					{errors[passwordInput.name] && (
 						<span className='error-message'>
-							{errors[passwordInput.name].message}
+							{errors[passwordInput.name].message as string}
 						</span>
 					)}
 				</div>
-				<Button text='register' className={buttonClass} type='submit' />
+				<Button text='register' className={buttonClass} />
 				<div className='registration-form-end'>
 					If you have an account you may
 					<Link to='/login' className='registration-form-end-bold'>

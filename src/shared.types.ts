@@ -1,9 +1,9 @@
-export type Author = {
+export type TAuthor = {
 	id: string;
 	name: string;
 };
 
-export type Course = {
+export type TCourse = {
 	id: string;
 	title: string;
 	description: string;
@@ -12,9 +12,19 @@ export type Course = {
 	authors: string[];
 };
 
-export type User = {
+export type TUser = {
 	isAuth: boolean;
 	token: string;
 	email: string;
 	name: string;
+};
+
+export type TServerReturn = {
+	successful: boolean;
+	result: any;
+	errors: string[];
+	user?: {
+		email: string;
+		name: string;
+	};
 };

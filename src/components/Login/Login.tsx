@@ -4,7 +4,7 @@ import { Input } from 'src/common/Input/Input';
 import { Label } from 'src/common/Label/Label';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { User } from 'src/shared.types';
+import { TUser } from 'src/shared.types';
 import { useDispatch } from 'react-redux';
 import { loginUser } from 'src/store/services';
 import { Login as LoginAction } from 'src/store/user/actions';
@@ -31,7 +31,7 @@ const Login = () => {
 		if (Array.isArray(result)) {
 			setRequestErrorMessage(result);
 		} else {
-			dispatch(LoginAction(result as User));
+			dispatch(LoginAction(result as TUser));
 			setRequestErrorMessage(undefined);
 			nav('/courses');
 		}
@@ -60,7 +60,7 @@ const Login = () => {
 					/>
 					{errors[emailInput.name] && (
 						<span className='error-message'>
-							{errors[emailInput.name].message}
+							{errors[emailInput.name].message as string}
 						</span>
 					)}
 				</div>
@@ -74,11 +74,11 @@ const Login = () => {
 					/>
 					{errors[passwordInput.name] && (
 						<span className='error-message'>
-							{errors[passwordInput.name].message}
+							{errors[passwordInput.name].message as string}
 						</span>
 					)}
 				</div>
-				<Button text='login' className={buttonClass} type='submit' />
+				<Button text='login' className={buttonClass} />
 				<div className='login-form-end'>
 					If you don't have an account you may
 					<Link to='/registration' className='login-form-end-bold'>

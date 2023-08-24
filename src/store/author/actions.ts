@@ -1,9 +1,12 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { getAuthors } from '../services';
-import { Author } from 'src/shared.types';
+import { TAuthor } from 'src/shared.types';
 
-export const GetAuthors = createAsyncThunk('authors/get', async () => {
-	return await getAuthors();
-});
+export const GetAuthors = createAsyncThunk<TAuthor[]>(
+	'authors/get',
+	async () => {
+		return await getAuthors();
+	}
+);
 
-export const CreateAuthor = createAction<Author>('authors/create');
+export const CreateAuthor = createAction<TAuthor>('authors/create');

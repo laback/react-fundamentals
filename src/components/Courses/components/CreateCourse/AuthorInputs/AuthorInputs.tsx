@@ -4,7 +4,7 @@ import { AuthorItem } from '../AuthorItem/AuthorItem';
 import { Label } from 'src/common/Label/Label';
 import { Input } from 'src/common/Input/Input';
 import { v4 as uuid } from 'uuid';
-import { Author } from 'src/shared.types';
+import { TAuthor } from 'src/shared.types';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAuthors } from 'src/store/selectors';
 import { CreateAuthor } from 'src/store/author/actions';
@@ -15,23 +15,6 @@ const addButtonClass = 'add-to-course-button';
 const labelClass = 'edit-create-course-form-label';
 const inputClass = 'edit-create-course-form-input';
 const placeholder = 'Input text';
-
-const removeAuthor = (authors, authorId, setAuthors) => {
-	const author = getAuthorById(authors, authorId);
-	const index = authors.indexOf(author, 0);
-	if (index > -1) {
-		authors.splice(index, 1);
-	}
-	setAuthors(authors);
-};
-
-const getAuthorById = (authors, authorId) => {
-	for (const author of authors) {
-		if (author.id == authorId) {
-			return author;
-		}
-	}
-};
 
 const AuthorInputs = ({ addedAuthors, setAddedAuthors }) => {
 	const dispatch = useDispatch();
@@ -49,7 +32,7 @@ const AuthorInputs = ({ addedAuthors, setAddedAuthors }) => {
 			setErrorMessage('Author name should contains at least 2 characters');
 		} else {
 			setErrorMessage(undefined);
-			const newAuthor: Author = {
+			const newAuthor: TAuthor = {
 				id: uuid(),
 				name: authorName,
 			};
@@ -61,13 +44,15 @@ const AuthorInputs = ({ addedAuthors, setAddedAuthors }) => {
 		}
 	};
 
-	const onDeleteAuthorAction = (authorId) => {
-		removeAuthor([...addedAuthors], authorId, setAddedAuthors);
+	const onDeleteAuthorAction = (authorId: string) => {
+		setAddedAuthors((prevValue: TAuthor[]) => {
+			return prevValue.filter((author) => !(author.id != authorId));
+		});
 	};
 
-	const onAddAuthorAction = (authorId) => {
-		setAddedAuthors((prevValue) => {
-			return [...prevValue, getAuthorById(authors, authorId)];
+	const onAddAuthorAction = (authorId: string) => {
+		setAddedAuthors((prevValue: TAuthor[]) => {
+			return [...prevValue, authors.find((author) => author.id === authorId)];
 		});
 	};
 

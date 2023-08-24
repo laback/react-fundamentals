@@ -1,10 +1,10 @@
-import { User } from 'src/shared.types';
+import { TUser } from 'src/shared.types';
 import { Login, Logout } from './actions';
 import { createReducer } from '@reduxjs/toolkit';
 
 const initUsersState = {
 	value: JSON.parse(localStorage.getItem('user')),
-} as { value: User };
+} as { value: TUser };
 
 const usersReducer = createReducer(initUsersState, (builder) => {
 	builder
@@ -13,7 +13,7 @@ const usersReducer = createReducer(initUsersState, (builder) => {
 			state.value = action.payload;
 		})
 		.addCase(Logout, (state) => {
-			const logoutUser: User = {
+			const logoutUser: TUser = {
 				email: '',
 				name: '',
 				token: '',

@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { ForwardedRef } from 'react';
 
 type TextareaProps = {
-	type?: 'text' | 'number';
 	placeholder: string;
 	className: string;
 	name?: string;
@@ -9,20 +8,21 @@ type TextareaProps = {
 	value?: string | number;
 };
 
-const Textarea = React.forwardRef((props: TextareaProps, ref) => {
-	return (
-		<>
-			<textarea
-				ref={ref}
-				name={props.name}
-				type={props.type}
-				placeholder={props.placeholder}
-				className={`default-textarea ${props.className}`}
-				onChange={(event) => props.onChange(event)}
-				value={props.value}
-			/>
-		</>
-	);
-});
+const Textarea = React.forwardRef(
+	(props: TextareaProps, ref: ForwardedRef<HTMLTextAreaElement>) => {
+		return (
+			<>
+				<textarea
+					ref={ref}
+					name={props.name}
+					placeholder={props.placeholder}
+					className={`default-textarea ${props.className}`}
+					onChange={(event) => props.onChange(event)}
+					value={props.value}
+				/>
+			</>
+		);
+	}
+);
 
 export { Textarea };

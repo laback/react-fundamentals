@@ -8,14 +8,11 @@ import { Button } from 'src/common/Button/Button';
 import { v4 as uuid } from 'uuid';
 import { useNavigate } from 'react-router-dom';
 import { AuthorInputs } from './AuthorInputs/AuthorInputs';
-import { Course } from 'src/shared.types';
+import { TCourse } from 'src/shared.types';
 import { useDispatch, useSelector } from 'react-redux';
 import { CreateCourse as CreateCourseAction } from 'src/store/course/actions';
-import {
-	getIsAuthorsLoadingStarted,
-	getIsCoursesLoadingStarted,
-} from 'src/store/selectors';
-import { GetAuthors } from 'src/store/author/actions';
+import { useLoadAuthors } from 'src/hooks';
+import { getIsAuthorsLoaded, getIsAuthorsLoading } from 'src/store/selectors';
 
 const labelClass = 'edit-create-course-form-label';
 
@@ -31,10 +28,11 @@ const convertDate = (date) => {
 
 const CreateCourse = () => {
 	const dispatch = useDispatch<any>();
-	const isAuthorsLoadingStarted = useSelector(getIsAuthorsLoadingStarted);
-	if (!isAuthorsLoadingStarted) {
-		dispatch(GetAuthors());
-	}
+	const isAuthorsLoaded = useSelector(getIsAuthorsLoaded);
+	const isAuthorsLoading = useSelector(getIsAuthorsLoading);
+	useEffect(() => {
+		useLoadAuthors(dispatch, isAuthorsLoaded, isAuthorsLoading);
+	}, []);
 	const nav = useNavigate();
 	const {
 		register,
@@ -74,7 +72,7 @@ const CreateCourse = () => {
 	const [addedAuthors, setAddedAuthors] = useState([]);
 
 	const onCreateAction = (course) => {
-		const newCourse: Course = {
+		const newCourse: TCourse = {
 			id: uuid(),
 			title: course.titleInput,
 			duration: course.durationInput,
@@ -110,7 +108,7 @@ const CreateCourse = () => {
 					/>
 					{errors[titleInput.name] && (
 						<span className='error-message'>
-							{errors[titleInput.name].message}
+							{errors[titleInput.name].message as string}
 						</span>
 					)}
 				</div>
@@ -123,7 +121,7 @@ const CreateCourse = () => {
 					/>
 					{errors[descriptionInput.name] && (
 						<span className='error-message'>
-							{errors[descriptionInput.name].message}
+							{errors[descriptionInput.name].message as string}
 						</span>
 					)}
 				</div>
@@ -143,7 +141,7 @@ const CreateCourse = () => {
 								/>
 								{errors[durationInput.name] && (
 									<span className='error-message'>
-										{errors[durationInput.name].message}
+										{errors[durationInput.name].message as string}
 									</span>
 								)}
 								<div className='edit-create-course-form-additional-info-left-duration-inputs-hours'>

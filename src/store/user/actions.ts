@@ -1,6 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
-import { User } from 'src/shared.types.js';
+import { TUser } from 'src/shared.types.js';
 
-export const Login = createAction<User>('user/login');
+export const Login = createAction<TUser>('user/login');
 
 export const Logout = createAction('user/logout');
