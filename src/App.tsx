@@ -1,29 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Header } from './components/Header/Header';
 import './App.css';
-import { DataContextType, LoggedInUserContextType } from 'shared.types';
+import { Provider } from 'react-redux';
 
 import { Container } from './components/Container/Container';
-
-import { mockedCoursesList, mockedAuthorsList } from './constants';
-
-export const DataContext = React.createContext<DataContextType>(null);
-export const LoggedInContext =
-	React.createContext<LoggedInUserContextType>(null);
+import { store } from './store';
 
 function App() {
-	const [loggedInUser, setLoggedInUser] = useState(
-		JSON.parse(localStorage.getItem('user'))
-	);
-	const [courses, setCourses] = useState(mockedCoursesList);
-	const [authors, setAuthors] = useState(mockedAuthorsList);
 	return (
-		<DataContext.Provider value={{ courses, setCourses, authors, setAuthors }}>
-			<LoggedInContext.Provider value={{ loggedInUser, setLoggedInUser }}>
-				<Header />
-				<Container />
-			</LoggedInContext.Provider>
-		</DataContext.Provider>
+		<Provider store={store}>
+			<Header />
+			<Container />
+		</Provider>
 	);
 }
 

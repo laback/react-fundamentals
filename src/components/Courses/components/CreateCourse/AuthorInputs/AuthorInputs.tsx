@@ -1,11 +1,13 @@
-import React, { useContext, useState } from 'react';
-import { DataContext } from 'src/App';
+import React, { useState } from 'react';
 import { Button } from 'src/common/Button/Button';
 import { AuthorItem } from '../AuthorItem/AuthorItem';
 import { Label } from 'src/common/Label/Label';
 import { Input } from 'src/common/Input/Input';
 import { v4 as uuid } from 'uuid';
-import { Author } from 'shared.types';
+import { TAuthor } from 'src/shared.types';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAuthors } from 'src/store/selectors';
+import { CreateAuthor } from 'src/store/author/actions';
 
 const buttonClass = 'edit-create-course-button';
 const trashButtonClass = 'remove-author-button';
@@ -14,54 +16,43 @@ const labelClass = 'edit-create-course-form-label';
 const inputClass = 'edit-create-course-form-input';
 const placeholder = 'Input text';
 
-const removeAuthor = (authors, authorId, setAuthors) => {
-	const author = getAuthorById(authors, authorId);
-	const index = authors.indexOf(author, 0);
-	if (index > -1) {
-		authors.splice(index, 1);
-	}
-	setAuthors(authors);
-};
-
-const getAuthorById = (authors, authorId) => {
-	for (const author of authors) {
-		if (author.id == authorId) {
-			return author;
-		}
-	}
-};
-
 const AuthorInputs = ({ addedAuthors, setAddedAuthors }) => {
-	const context = useContext(DataContext);
-	const authors = context.authors;
-	const setAuthors = context.setAuthors;
+	const dispatch = useDispatch();
+	const authors = useSelector(getAuthors);
 
 	const [authorName, setAuthorName] = useState('');
+	const [errorMessage, setErrorMessage] = useState(undefined);
 
 	const onAuthorNameInputChange = (event) => {
 		setAuthorName(event.target.value);
 	};
 
 	const onCreateAuthorClick = () => {
-		const newAuthor: Author = {
-			id: uuid(),
-			name: authorName,
-		};
-		setAddedAuthors((prevValue) => {
-			return [...prevValue, newAuthor];
-		});
-		setAuthors((prevValue) => {
-			return [...prevValue, newAuthor];
+		if (authorName.length < 2) {
+			setErrorMessage('Author name should contains at least 2 characters');
+		} else {
+			setErrorMessage(undefined);
+			const newAuthor: TAuthor = {
+				id: uuid(),
+				name: authorName,
+			};
+			setAuthorName('');
+			setAddedAuthors((prevValue) => {
+				return [...prevValue, newAuthor];
+			});
+			dispatch(CreateAuthor(newAuthor));
+		}
+	};
+
+	const onDeleteAuthorAction = (authorId: string) => {
+		setAddedAuthors((prevValue: TAuthor[]) => {
+			return prevValue.filter((author) => !(author.id != authorId));
 		});
 	};
 
-	const onDeleteAuthorAction = (authorId) => {
-		removeAuthor([...addedAuthors], authorId, setAddedAuthors);
-	};
-
-	const onAddAuthorAction = (authorId) => {
-		setAddedAuthors((prevValue) => {
-			return [...prevValue, getAuthorById(authors, authorId)];
+	const onAddAuthorAction = (authorId: string) => {
+		setAddedAuthors((prevValue: TAuthor[]) => {
+			return [...prevValue, authors.find((author) => author.id === authorId)];
 		});
 	};
 
@@ -108,12 +99,16 @@ const AuthorInputs = ({ addedAuthors, setAddedAuthors }) => {
 				</div>
 				<Label className={labelClass} text='Author name' />
 				<div className='edit-create-course-form-additional-info-left-authors-inputs'>
-					<Input
-						className={inputClass}
-						placeholder={placeholder}
-						value={authorName}
-						onChange={(event) => onAuthorNameInputChange(event)}
-					/>
+					<div>
+						<Input
+							className={inputClass}
+							placeholder={placeholder}
+							value={authorName}
+							onChange={(event) => onAuthorNameInputChange(event)}
+						/>
+						<div className='error-message'>{errorMessage}</div>
+					</div>
+
 					<Button
 						text='create author'
 						className={buttonClass}

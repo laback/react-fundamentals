@@ -1,11 +1,13 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from 'src/common/Button/Button';
 import { Input } from 'src/common/Input/Input';
 import { Label } from 'src/common/Label/Label';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { LoggedInContext } from 'src/App';
-import { AuthUser } from 'shared.types';
+import { TUser } from 'src/shared.types';
+import { useDispatch } from 'react-redux';
+import { loginUser } from 'src/store/services';
+import { Login as LoginAction } from 'src/store/user/actions';
 
 const labelClass = 'login-form-label';
 
@@ -16,8 +18,8 @@ const inputClass = 'login-form-input';
 const buttonClass = 'login-form-button';
 
 const Login = () => {
-	const setUser = useContext(LoggedInContext).setLoggedInUser;
-	const [requestErrorMessage, setRequestErrorMessage] = useState(false);
+	const dispatch = useDispatch();
+	const [requestErrorMessage, setRequestErrorMessage] = useState([]);
 	const {
 		register,
 		handleSubmit,
@@ -25,30 +27,13 @@ const Login = () => {
 	} = useForm();
 	const nav = useNavigate();
 	const onLogin = async (user) => {
-		const response = await fetch('http://localhost:4000/login', {
-			method: 'POST',
-			body: JSON.stringify(user),
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
-
-		const result = await response.json();
-		if (result.successful) {
-			console.log(result);
-			const token = result.result;
-			const user: AuthUser = {
-				token: token,
-				email: result.user.email,
-				name: result.user.name,
-			};
-			localStorage.setItem('user', JSON.stringify(user));
-			setUser(user);
+		const result = await loginUser(user);
+		if (Array.isArray(result)) {
+			setRequestErrorMessage(result);
+		} else {
+			dispatch(LoginAction(result as TUser));
 			setRequestErrorMessage(undefined);
 			nav('/courses');
-		} else {
-			console.log(result);
-			setRequestErrorMessage(result.errors.join('\n'));
 		}
 	};
 
@@ -75,7 +60,7 @@ const Login = () => {
 					/>
 					{errors[emailInput.name] && (
 						<span className='error-message'>
-							{errors[emailInput.name].message}
+							{errors[emailInput.name].message as string}
 						</span>
 					)}
 				</div>
@@ -89,11 +74,11 @@ const Login = () => {
 					/>
 					{errors[passwordInput.name] && (
 						<span className='error-message'>
-							{errors[passwordInput.name].message}
+							{errors[passwordInput.name].message as string}
 						</span>
 					)}
 				</div>
-				<Button text='login' className={buttonClass} type='submit' />
+				<Button text='login' className={buttonClass} />
 				<div className='login-form-end'>
 					If you don't have an account you may
 					<Link to='/registration' className='login-form-end-bold'>

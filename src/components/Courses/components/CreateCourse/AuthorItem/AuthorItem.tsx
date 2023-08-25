@@ -1,18 +1,11 @@
-import React, { useMemo, useContext } from 'react';
-import { DataContext } from 'src/App';
-
-const getAuthorById = (authorId) => {
-	const authors = useContext(DataContext).authors;
-
-	for (const author of authors) {
-		if (author.id == authorId) {
-			return author;
-		}
-	}
-};
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { getAuthors } from 'src/store/selectors';
 
 const AuthorItem = ({ authorId, button }) => {
-	const author = getAuthorById(authorId);
+	const author = useSelector(getAuthors).find(
+		(author) => author.id === authorId
+	);
 
 	return (
 		<div className='author-item'>

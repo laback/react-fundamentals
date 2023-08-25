@@ -1,15 +1,18 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input } from 'src/common/Input/Input';
 import { Label } from 'src/common/Label/Label';
 import { Textarea } from 'src/common/Textarea/Textarea';
-import { toHoursAndMinutes } from 'src/constants';
+import { toHoursAndMinutes } from 'src/helper';
 import { useForm } from 'react-hook-form';
 import { Button } from 'src/common/Button/Button';
 import { v4 as uuid } from 'uuid';
-import { DataContext } from 'src/App';
 import { useNavigate } from 'react-router-dom';
 import { AuthorInputs } from './AuthorInputs/AuthorInputs';
-import { Course } from 'shared.types';
+import { TCourse } from 'src/shared.types';
+import { useDispatch, useSelector } from 'react-redux';
+import { CreateCourse as CreateCourseAction } from 'src/store/course/actions';
+import { useLoadAuthors } from 'src/hooks';
+import { getIsAuthorsLoaded, getIsAuthorsLoading } from 'src/store/selectors';
 
 const labelClass = 'edit-create-course-form-label';
 
@@ -24,6 +27,12 @@ const convertDate = (date) => {
 };
 
 const CreateCourse = () => {
+	const dispatch = useDispatch<any>();
+	const isAuthorsLoaded = useSelector(getIsAuthorsLoaded);
+	const isAuthorsLoading = useSelector(getIsAuthorsLoading);
+	useEffect(() => {
+		useLoadAuthors(dispatch, isAuthorsLoaded, isAuthorsLoading);
+	}, []);
 	const nav = useNavigate();
 	const {
 		register,
@@ -31,9 +40,6 @@ const CreateCourse = () => {
 		watch,
 		formState: { errors },
 	} = useForm();
-
-	const context = useContext(DataContext);
-	const setCourses = context.setCourses;
 
 	const durationInput = register('durationInput', {
 		required: 'Duration is required',
@@ -66,7 +72,7 @@ const CreateCourse = () => {
 	const [addedAuthors, setAddedAuthors] = useState([]);
 
 	const onCreateAction = (course) => {
-		const newCourse: Course = {
+		const newCourse: TCourse = {
 			id: uuid(),
 			title: course.titleInput,
 			duration: course.durationInput,
@@ -77,9 +83,7 @@ const CreateCourse = () => {
 			}),
 		};
 		console.log(newCourse);
-		setCourses((prevValue) => {
-			return [...prevValue, newCourse];
-		});
+		dispatch(CreateCourseAction(newCourse));
 		nav('/courses');
 	};
 
@@ -104,7 +108,7 @@ const CreateCourse = () => {
 					/>
 					{errors[titleInput.name] && (
 						<span className='error-message'>
-							{errors[titleInput.name].message}
+							{errors[titleInput.name].message as string}
 						</span>
 					)}
 				</div>
@@ -117,7 +121,7 @@ const CreateCourse = () => {
 					/>
 					{errors[descriptionInput.name] && (
 						<span className='error-message'>
-							{errors[descriptionInput.name].message}
+							{errors[descriptionInput.name].message as string}
 						</span>
 					)}
 				</div>
@@ -137,7 +141,7 @@ const CreateCourse = () => {
 								/>
 								{errors[durationInput.name] && (
 									<span className='error-message'>
-										{errors[durationInput.name].message}
+										{errors[durationInput.name].message as string}
 									</span>
 								)}
 								<div className='edit-create-course-form-additional-info-left-duration-inputs-hours'>

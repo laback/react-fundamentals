@@ -1,9 +1,10 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { LoggedInContext } from 'src/App';
+import { getLoggedInUser } from 'src/store/selectors';
 
 const Container = () => {
-	const loggedInUser = useContext(LoggedInContext).loggedInUser;
+	const loggedInUser = useSelector(getLoggedInUser);
 	const nav = useNavigate();
 	const location = useLocation();
 	useEffect(() => {

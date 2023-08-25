@@ -1,14 +1,15 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { LoggedInContext } from 'src/App';
 import { Button } from 'src/common/Button/Button';
+import { getLoggedInUser } from 'src/store/selectors';
+import { TUser } from 'src/shared.types';
 
 const buttonText = 'add new course';
 const buttonClass = 'empty-list-add-button';
 
 const EmptyList = () => {
-	const loggedInUser = useContext(LoggedInContext).loggedInUser;
-	console.log(loggedInUser);
+	const loggedInUser: TUser = useSelector(getLoggedInUser);
 	const nav = useNavigate();
 	const onAddAction = () => {
 		nav('add');
