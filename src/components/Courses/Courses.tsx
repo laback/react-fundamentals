@@ -10,8 +10,6 @@ import {
 	getAuthors,
 	getIsAuthorsLoaded,
 	getIsCoursesLoaded,
-	getIsCoursesLoading,
-	getIsAuthorsLoading,
 } from 'src/store/selectors';
 import { useCourseById, useLoadFullData } from 'src/hooks';
 import { TCourse } from 'src/shared.types';
@@ -31,49 +29,39 @@ const Courses = () => {
 	const dispatch = useDispatch<any>();
 
 	const isCoursesLoaded = useSelector(getIsCoursesLoaded);
-	const isCoursesLoading = useSelector(getIsCoursesLoading);
 	const isAuthorsLoaded = useSelector(getIsAuthorsLoaded);
-	const isAuthorsLoading = useSelector(getIsAuthorsLoading);
 	useEffect(() => {
-		useLoadFullData(
-			dispatch,
-			isCoursesLoaded,
-			isCoursesLoading,
-			isAuthorsLoaded,
-			isAuthorsLoading
-		);
+		useLoadFullData(dispatch, isCoursesLoaded, isAuthorsLoaded);
 	}, []);
 	const nav = useNavigate();
 	const onAddCourseAction = () => {
-		nav('add');
+		nav('/courses/add');
 	};
 	const body = [];
 	getCoursesToDisplay().map((course) => {
 		body.push(<CourseCard key={course.id} courseId={course.id} />);
 	});
-	if (isCoursesLoaded && isAuthorsLoaded) {
-		return (
-			<>
-				<div className='courses'>
-					{body.length > 0 ? (
-						<>
-							<div className='courses-head'>
-								<SearchBar />
-								<Button
-									text={buttonText}
-									onClick={onAddCourseAction}
-									className={buttonClass}
-								/>
-							</div>
-							{body}
-						</>
-					) : (
-						<EmptyList />
-					)}
-				</div>
-			</>
-		);
-	}
+	return (
+		<>
+			<div className='courses'>
+				{body.length > 0 ? (
+					<>
+						<div className='courses-head'>
+							<SearchBar />
+							<Button
+								text={buttonText}
+								onClick={onAddCourseAction}
+								className={buttonClass}
+							/>
+						</div>
+						{body}
+					</>
+				) : (
+					<EmptyList />
+				)}
+			</div>
+		</>
+	);
 };
 
 export default Courses;

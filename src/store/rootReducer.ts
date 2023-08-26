@@ -1,9 +1,9 @@
-import { asyncAuthorsReducer } from './author/reducer';
-import { asyncCoursesReducer } from './course/reducer';
+import { authorsReducer } from './author/reducer';
+import { coursesReducer } from './course/reducer';
 import { usersReducer } from './user/reducer';
 
 export const rootReducer = {
-	courses: asyncCoursesReducer,
-	authors: asyncAuthorsReducer,
+	courses: coursesReducer,
+	authors: authorsReducer,
 	user: usersReducer,
 };

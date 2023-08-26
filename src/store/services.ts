@@ -3,22 +3,68 @@ import { TAuthor, TCourse, TUser, TServerReturn } from 'src/shared.types';
 async function doPost(params: {
 	url: string;
 	payload: object;
+	token?: string;
 }): Promise<TServerReturn> {
-	const { url, payload } = params;
+	const { url, payload, token } = params;
 	const response = await fetch(url, {
 		method: 'POST',
 		body: JSON.stringify(payload),
 		headers: {
+			Authorization: token,
 			'Content-Type': 'application/json',
 		},
 	});
 	return (await response.json()) as TServerReturn;
 }
 
-async function doGet(params: { url: string }): Promise<TServerReturn> {
-	const { url } = params;
+async function doGet(params: {
+	url: string;
+	token?: string;
+}): Promise<TServerReturn> {
+	const { url, token } = params;
+	let headers = {};
+	if (token) {
+		headers = {
+			Authorization: token,
+			'Content-Type': 'application/json',
+		};
+	} else {
+		headers = {
+			'Content-Type': 'application/json',
+		};
+	}
 	const response = await fetch(url, {
+		headers: headers,
+	});
+	return (await response.json()) as TServerReturn;
+}
+
+async function doDelete(params: {
+	url: string;
+	token?: string;
+}): Promise<TServerReturn> {
+	const { url, token } = params;
+	const response = await fetch(url, {
+		method: 'Delete',
 		headers: {
+			Authorization: token,
+			'Content-Type': 'application/json',
+		},
+	});
+	return (await response.json()) as TServerReturn;
+}
+
+async function doPut(params: {
+	url: string;
+	token?: string;
+	payload: object;
+}): Promise<TServerReturn> {
+	const { url, token, payload } = params;
+	const response = await fetch(url, {
+		method: 'Put',
+		body: JSON.stringify(payload),
+		headers: {
+			Authorization: token,
 			'Content-Type': 'application/json',
 		},
 	});
@@ -40,7 +86,11 @@ export async function loginUser(userData): Promise<TUser | string[]> {
 		};
 		return loggedInUser;
 	} else {
-		return errors;
+		if (errors) {
+			return errors;
+		} else {
+			return [result];
+		}
 	}
 }
 
@@ -55,6 +105,22 @@ export async function registerUser(user): Promise<void | string[]> {
 	}
 }
 
+export async function logoutUser(token: string): Promise<void> {
+	await doDelete({
+		token: token,
+		url: 'http://localhost:4000/logout',
+	});
+}
+
+export async function getUser(token: string): Promise<TUser> {
+	const { result } = await doGet({
+		url: 'http://localhost:4000/users/me',
+		token: token,
+	});
+
+	return result as TUser;
+}
+
 export async function getCourses(): Promise<TCourse[]> {
 	const { result } = await doGet({
 		url: 'http://localhost:4000/courses/all',
@@ -66,6 +132,44 @@ export async function getCourses(): Promise<TCourse[]> {
 	return courses;
 }
 
+export async function createCourse(params: {
+	course: TCourse;
+	token: string;
+}): Promise<TCourse> {
+	const { token, course } = params;
+	const { result } = await doPost({
+		url: 'http://localhost:4000/courses/add',
+		payload: course,
+		token: token,
+	});
+	return result as TCourse;
+}
+
+export async function deleteCourse(params: {
+	courseId: string;
+	token: string;
+}): Promise<string> {
+	const { token, courseId } = params;
+	await doDelete({
+		url: 'http://localhost:4000/courses/' + courseId,
+		token: token,
+	});
+	return courseId;
+}
+
+export async function updateCourse(params: {
+	course: TCourse;
+	token: string;
+}): Promise<TCourse> {
+	const { token, course } = params;
+	const { result } = await doPut({
+		url: 'http://localhost:4000/courses/' + course.id,
+		token: token,
+		payload: course,
+	});
+	return result as TCourse;
+}
+
 export async function getAuthors(): Promise<TAuthor[]> {
 	const { result } = await doGet({
 		url: 'http://localhost:4000/authors/all',
@@ -75,4 +179,17 @@ export async function getAuthors(): Promise<TAuthor[]> {
 		return author as TAuthor;
 	});
 	return authors;
+}
+
+export async function createAuthor(params: {
+	author: TAuthor;
+	token: string;
+}): Promise<TAuthor> {
+	const { token, author } = params;
+	const { result } = await doPost({
+		url: 'http://localhost:4000/authors/add',
+		payload: author,
+		token: token,
+	});
+	return result as TAuthor;
 }

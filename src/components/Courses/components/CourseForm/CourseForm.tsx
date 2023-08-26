@@ -5,14 +5,15 @@ import { Textarea } from 'src/common/Textarea/Textarea';
 import { toHoursAndMinutes } from 'src/helper';
 import { useForm } from 'react-hook-form';
 import { Button } from 'src/common/Button/Button';
-import { v4 as uuid } from 'uuid';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { AuthorInputs } from './AuthorInputs/AuthorInputs';
-import { TCourse } from 'src/shared.types';
+import { TCourse, TUser } from 'src/shared.types';
 import { useDispatch, useSelector } from 'react-redux';
-import { CreateCourse as CreateCourseAction } from 'src/store/course/actions';
-import { useLoadAuthors } from 'src/hooks';
-import { getIsAuthorsLoaded, getIsAuthorsLoading } from 'src/store/selectors';
+import {
+	CreateCourse as CreateCourseAction,
+	UpdateCourse,
+} from 'src/store/course/actions';
+import { getAuthors, getCourses, getLoggedInUser } from 'src/store/selectors';
 
 const labelClass = 'edit-create-course-form-label';
 
@@ -21,18 +22,22 @@ const textareaClass = 'edit-create-course-form-textarea';
 const inputClass = 'edit-create-course-form-input';
 const placeholder = 'Input text';
 
-const convertDate = (date) => {
-	const splittedDate = date.split('/');
-	return splittedDate[1] + '/' + splittedDate[0] + '/' + splittedDate[2];
-};
+const CourseForm = () => {
+	const location = useLocation();
 
-const CreateCourse = () => {
+	const courseId: string = useParams().courseId;
+
+	const authors = useSelector(getAuthors);
+	let course = useSelector(getCourses).find((course) => course.id === courseId);
+	if (!course) {
+		course = {
+			duration: 0,
+			description: '',
+			title: '',
+			authors: [],
+		};
+	}
 	const dispatch = useDispatch<any>();
-	const isAuthorsLoaded = useSelector(getIsAuthorsLoaded);
-	const isAuthorsLoading = useSelector(getIsAuthorsLoading);
-	useEffect(() => {
-		useLoadAuthors(dispatch, isAuthorsLoaded, isAuthorsLoading);
-	}, []);
 	const nav = useNavigate();
 	const {
 		register,
@@ -42,19 +47,21 @@ const CreateCourse = () => {
 	} = useForm();
 
 	const durationInput = register('durationInput', {
+		value: course.duration,
 		required: 'Duration is required',
 		min: {
 			value: 1,
 			message: 'Duration must me more than 0',
 		},
 	});
-	const hoursWatch = watch(durationInput.name, '0');
-	const [hours, setHours] = useState('00:00');
+	const hoursWatch = watch(durationInput.name, course.duration);
+	const [hours, setHours] = useState(toHoursAndMinutes(course.duration));
 	useEffect(() => {
 		setHours(toHoursAndMinutes(hoursWatch));
 	}, [hoursWatch]);
 
 	const titleInput = register('titleInput', {
+		value: course.title,
 		required: 'Title is required',
 		minLength: {
 			value: 2,
@@ -62,6 +69,7 @@ const CreateCourse = () => {
 		},
 	});
 	const descriptionInput = register('descriptionInput', {
+		value: course.description,
 		required: 'Description is required',
 		minLength: {
 			value: 2,
@@ -69,21 +77,30 @@ const CreateCourse = () => {
 		},
 	});
 
-	const [addedAuthors, setAddedAuthors] = useState([]);
+	const [addedAuthors, setAddedAuthors] = useState(
+		course.authors.map((authorId) =>
+			authors.find((author) => author.id === authorId)
+		)
+	);
 
-	const onCreateAction = (course) => {
+	const token = (useSelector(getLoggedInUser) as TUser).token;
+
+	const onCreateAction = async (course) => {
 		const newCourse: TCourse = {
-			id: uuid(),
 			title: course.titleInput,
-			duration: course.durationInput,
-			creationDate: convertDate(new Date().toLocaleDateString()),
+			duration: parseInt(course.durationInput),
 			description: course.descriptionInput,
 			authors: addedAuthors.map((addedAuthor) => {
 				return addedAuthor.id;
 			}),
 		};
-		console.log(newCourse);
-		dispatch(CreateCourseAction(newCourse));
+		if (location.pathname.includes('update')) {
+			await dispatch(
+				UpdateCourse({ course: { ...newCourse, id: courseId }, token })
+			);
+		} else {
+			await dispatch(CreateCourseAction({ course: newCourse, token }));
+		}
 		nav('/courses');
 	};
 
@@ -167,4 +184,4 @@ const CreateCourse = () => {
 	);
 };
 
-export { CreateCourse };
+export { CourseForm };

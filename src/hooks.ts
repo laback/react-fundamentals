@@ -18,30 +18,20 @@ export const useCourseById = (
 export const useLoadFullData = (
 	dispatch,
 	isCoursesLoaded: boolean,
-	isCoursesLoading: boolean,
-	isAuthorsLoaded: boolean,
-	isAuthorsLoading: boolean
+	isAuthorsLoaded: boolean
 ): void => {
-	useLoadCourses(dispatch, isCoursesLoaded, isCoursesLoading);
-	useLoadAuthors(dispatch, isAuthorsLoaded, isAuthorsLoading);
+	useLoadCourses(dispatch, isCoursesLoaded);
+	useLoadAuthors(dispatch, isAuthorsLoaded);
 };
 
-export const useLoadAuthors = (
-	dispatch,
-	isLoaded: boolean,
-	isLoading: boolean
-): void => {
-	if (!isLoaded && !isLoading) {
+export const useLoadAuthors = (dispatch, isLoaded: boolean): void => {
+	if (!isLoaded) {
 		dispatch(GetAuthors());
 	}
 };
 
-export const useLoadCourses = (
-	dispatch,
-	isLoaded: boolean,
-	isLoading: boolean
-): void => {
-	if (!isLoaded && !isLoading) {
+export const useLoadCourses = (dispatch, isLoaded: boolean): void => {
+	if (!isLoaded) {
 		dispatch(GetCourses());
 	}
 };

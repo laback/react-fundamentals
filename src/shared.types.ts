@@ -1,13 +1,13 @@
 export type TAuthor = {
-	id: string;
+	id?: string;
 	name: string;
 };
 
 export type TCourse = {
-	id: string;
+	id?: string;
 	title: string;
 	description: string;
-	creationDate: string;
+	creationDate?: string;
 	duration: number;
 	authors: string[];
 };
@@ -17,6 +17,7 @@ export type TUser = {
 	token: string;
 	email: string;
 	name: string;
+	role?: string;
 };
 
 export type TServerReturn = {
@@ -26,5 +27,6 @@ export type TServerReturn = {
 	user?: {
 		email: string;
 		name: string;
+		role?: string;
 	};
 };

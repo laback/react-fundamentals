@@ -18,12 +18,12 @@ const loginButtonText = 'login';
 const loginButtonClass = 'login-button';
 
 const Header = () => {
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<any>();
 	const location = useLocation();
 	const loggedInUser: TUser = useSelector(getLoggedInUser);
 	const nav = useNavigate();
-	const onLogoutAction = () => {
-		dispatch(Logout());
+	const onLogoutAction = async () => {
+		await dispatch(Logout(loggedInUser.token));
 		nav('/login');
 	};
 	let right;

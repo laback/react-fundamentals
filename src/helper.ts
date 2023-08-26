@@ -8,3 +8,8 @@ export function toHoursAndMinutes(totalMinutes) {
 function padTo2Digits(num) {
 	return num.toString().padStart(2, '0');
 }
+
+export function formatCreationDate(creationDate: string) {
+	const splittedDate = creationDate.split('/');
+	return splittedDate[1] + '/' + splittedDate[0] + '/' + splittedDate[2];
+}

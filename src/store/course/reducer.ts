@@ -1,39 +1,43 @@
 import { TCourse } from 'src/shared.types';
-import { createSlice } from '@reduxjs/toolkit';
-import { CreateCourse, DeleteCourse, GetCourses } from './actions';
+import { createReducer } from '@reduxjs/toolkit';
+import {
+	CreateCourse,
+	DeleteCourse,
+	GetCourses,
+	UpdateCourse,
+} from './actions';
+import { formatCreationDate } from 'src/helper';
 
 const initCoursesState = {
 	value: [],
 	isLoaded: false,
-	isLoading: false,
-} as { value: TCourse[]; isLoaded: boolean; isLoading: boolean };
+} as { value: TCourse[]; isLoaded: boolean };
 
-const asyncCoursesReducer = createSlice({
-	name: 'courses',
-	initialState: initCoursesState,
-	reducers: {},
-	extraReducers: (builder) => {
-		builder
-			.addCase(GetCourses.pending, (state: typeof initCoursesState) => {
-				state.isLoading = true;
-			})
-			.addCase(
-				GetCourses.fulfilled,
-				(state: typeof initCoursesState, action) => {
-					state.isLoaded = true;
-					state.isLoading = false;
-					state.value = action.payload;
-				}
-			)
-			.addCase(CreateCourse, (state, action) => {
-				state.value = [...state.value, action.payload];
-			})
-			.addCase(DeleteCourse, (state, action) => {
-				state.value = state.value.filter(
-					(course) => course.id != action.payload
-				);
+const coursesReducer = createReducer(initCoursesState, (builder) => {
+	builder
+		.addCase(GetCourses.fulfilled, (state: typeof initCoursesState, action) => {
+			state.isLoaded = true;
+			state.value = action.payload.map((course) => {
+				return {
+					...course,
+					creationDate: formatCreationDate(course.creationDate),
+				};
 			});
-	},
-}).reducer;
+		})
+		.addCase(CreateCourse.fulfilled, (state, action) => {
+			state.value = [...state.value, action.payload];
+		})
+		.addCase(UpdateCourse.fulfilled, (state, payload) => {
+			const copiedState = [...state.value];
+			const updateIndex = copiedState.indexOf(
+				copiedState.find((course) => course.id === payload.payload.id)
+			);
+			copiedState[updateIndex] = payload.payload;
+			state.value = copiedState;
+		})
+		.addCase(DeleteCourse.fulfilled, (state, action) => {
+			state.value = state.value.filter((course) => course.id != action.payload);
+		});
+});
 
-export { asyncCoursesReducer };
+export { coursesReducer };
