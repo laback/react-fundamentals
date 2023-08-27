@@ -8,7 +8,7 @@ import {
 } from './actions';
 import { formatCreationDate } from 'src/helper';
 
-const initCoursesState = {
+export const initCoursesState = {
 	value: [],
 	isLoaded: false,
 } as { value: TCourse[]; isLoaded: boolean };

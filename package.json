@@ -6,9 +6,11 @@
     "@hookform/error-message": "^2.0.1",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "dayjs": "^1.11.9",
+    "enzyme": "^3.11.0",
+    "fetch-mock": "^9.11.0",
+    "node-fetch": "^3.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.45.4",
@@ -28,7 +30,8 @@
     "eslint:fix": "eslint --fix --ext .ts --ext .tsx src",
     "test:nowatch": "react-scripts test --watchAll=false",
     "prepare": "husky install",
-    "prepublish": "npm run eslint:fix"
+    "prepublish": "npm run eslint:fix",
+    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache"
   },
   "eslintConfig": {
     "extends": [
@@ -49,6 +52,7 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/react": "^14.0.0",
     "@trivago/prettier-plugin-sort-imports": "^4.2.0",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "eslint": "^8.46.0",
@@ -60,7 +64,9 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.33.1",
     "husky": "^8.0.3",
+    "jest": "^27.5.1",
     "prettier": "^3.0.1",
     "typescript": "^4"
-  }
+  },
+  "prepublish": "npm run eslint:fix && npm run test:nowatch"
 }

@@ -14,6 +14,8 @@ async function doPost(params: {
 			'Content-Type': 'application/json',
 		},
 	});
+	const json = await response.json();
+	const a = 1;
 	return (await response.json()) as TServerReturn;
 }
 
@@ -142,6 +144,7 @@ export async function createCourse(params: {
 		payload: course,
 		token: token,
 	});
+	console.log(result);
 	return result as TCourse;
 }
 
