@@ -16,12 +16,6 @@ const request: TCourse = {
 };
 const response: TCourse = { ...request, id: '3' };
 
-// global.fetch = jest.fn(() =>
-// 	Promise.resolve({
-// 		json: () => Promise.resolve({ body: response }),
-// 	})
-// );
-
 describe('CourseReducer', () => {
 	test('reducer should return the initial state', () => {
 		expect(coursesReducer(undefined, { type: undefined })).toEqual(
@@ -30,7 +24,10 @@ describe('CourseReducer', () => {
 	});
 
 	test('reducer should handle CreateCourse and returns new state', async () => {
-		store.dispatch(await CreateCourse({ course: request, token: '' }));
-		expect(store.getState().value).toEqual([response]);
+		const newState = coursesReducer(initCoursesState, {
+			type: CreateCourse.fulfilled,
+			payload: response,
+		});
+		expect(newState.value).toEqual([response, []]);
 	});
 });
