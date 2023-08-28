@@ -3,6 +3,7 @@ import { RootState } from '.';
 
 export const getLoggedInUser = (state: RootState) => state.user.value as TUser;
 export const getIsUserLoaded = (state: RootState) => state.user.isLoaded;
+export const getIsLoggedIn = (state: RootState) => state.user.isLoggedIn;
 export const getIsAdmin = (state: RootState) =>
 	(state.user.value as TUser).role == 'admin';
 export const getToken = (state: RootState) => (state.user.value as TUser).token;

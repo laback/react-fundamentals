@@ -25,7 +25,13 @@ const coursesReducer = createReducer(initCoursesState, (builder) => {
 			});
 		})
 		.addCase(CreateCourse.fulfilled, (state, action) => {
-			state.value = [...state.value, action.payload];
+			state.value = [
+				...state.value,
+				{
+					...action.payload,
+					creationDate: formatCreationDate(action.payload.creationDate),
+				},
+			];
 		})
 		.addCase(UpdateCourse.fulfilled, (state, payload) => {
 			const copiedState = [...state.value];

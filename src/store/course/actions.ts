@@ -14,23 +14,23 @@ export const GetCourses = createAsyncThunk<TCourse[]>(
 	}
 );
 
-export const CreateCourse = createAsyncThunk<
-	TCourse,
-	{ course: TCourse; token: string }
->('courses/create', async (input) => {
-	return await createCourse(input);
-});
+export const CreateCourse = createAsyncThunk<TCourse, TCourse>(
+	'courses/create',
+	async (course) => {
+		return await createCourse(course);
+	}
+);
 
-export const UpdateCourse = createAsyncThunk<
-	TCourse,
-	{ course: TCourse; token: string }
->('courses/update', async (input) => {
-	return await updateCourse(input);
-});
+export const UpdateCourse = createAsyncThunk<TCourse, TCourse>(
+	'courses/update',
+	async (course) => {
+		return await updateCourse(course);
+	}
+);
 
-export const DeleteCourse = createAsyncThunk<
-	string,
-	{ courseId: string; token: string }
->('courses/delete', async (input) => {
-	return await deleteCourse(input);
-});
+export const DeleteCourse = createAsyncThunk<string, string>(
+	'courses/delete',
+	async (courseId) => {
+		return await deleteCourse(courseId);
+	}
+);

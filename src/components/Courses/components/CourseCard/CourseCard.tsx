@@ -24,7 +24,6 @@ const editButtonClass = 'edit-button';
 const CourseCard = ({ courseId }) => {
 	const dispatch = useDispatch<any>();
 
-	const token = useSelector(getToken);
 	const courses = useSelector(getCourses);
 	const authors = useSelector(getAuthors);
 	const isAdmin = useSelector(getIsAdmin);
@@ -37,7 +36,7 @@ const CourseCard = ({ courseId }) => {
 		nav('/courses/update/' + courseId);
 	};
 	const onDeleteCourseAction = async () => {
-		await dispatch(DeleteCourse({ courseId, token }));
+		await dispatch(DeleteCourse(courseId));
 	};
 	if (course) {
 		return (

@@ -95,11 +95,9 @@ const CourseForm = () => {
 			}),
 		};
 		if (location.pathname.includes('update')) {
-			await dispatch(
-				UpdateCourse({ course: { ...newCourse, id: courseId }, token })
-			);
+			await dispatch(UpdateCourse({ ...newCourse, id: courseId }));
 		} else {
-			await dispatch(CreateCourseAction({ course: newCourse, token }));
+			await dispatch(CreateCourseAction(newCourse));
 		}
 		nav('/courses');
 	};

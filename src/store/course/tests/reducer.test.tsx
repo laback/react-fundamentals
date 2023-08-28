@@ -1,20 +1,19 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { formatCreationDate } from 'src/helper';
 import { CreateCourse } from '../actions';
 import { coursesReducer, initCoursesState } from '../reducer';
 import { TCourse } from 'src/shared.types';
-import { rootReducer } from 'src/store/rootReducer';
-import { createCourse } from 'src/store/services';
-import fetchMock from 'fetch-mock';
-
-const store = configureStore({ reducer: coursesReducer });
 
 const request: TCourse = {
 	title: 'title',
 	description: 'description',
 	authors: ['1', '2'],
 	duration: 120,
+	creationDate: '28/08/2023',
 };
-const response: TCourse = { ...request, id: '3' };
+const response: TCourse = {
+	...request,
+	creationDate: formatCreationDate(request.creationDate),
+};
 
 describe('CourseReducer', () => {
 	test('reducer should return the initial state', () => {
@@ -26,7 +25,7 @@ describe('CourseReducer', () => {
 	test('reducer should handle CreateCourse and returns new state', async () => {
 		const newState = coursesReducer(initCoursesState, {
 			type: CreateCourse.fulfilled,
-			payload: response,
+			payload: request,
 		});
 		expect(newState.value).toEqual([response]);
 	});

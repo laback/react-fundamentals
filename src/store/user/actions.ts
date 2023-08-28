@@ -13,16 +13,10 @@ export const Login = createAsyncThunk<TUser | string[], object>(
 	}
 );
 
-export const Logout = createAsyncThunk<void, string>(
-	'user/logout',
-	async (token: string) => {
-		return await logoutUser(token);
-	}
-);
+export const Logout = createAsyncThunk<void>('user/logout', async () => {
+	return await logoutUser();
+});
 
-export const GetUser = createAsyncThunk<TUser, string>(
-	'user/get',
-	async (token) => {
-		return await getUser(token);
-	}
-);
+export const GetUser = createAsyncThunk<TUser>('user/get', async () => {
+	return await getUser();
+});

@@ -37,7 +37,7 @@ const AuthorInputs = ({ addedAuthors, setAddedAuthors }) => {
 			};
 			setAuthorName('');
 			const addedAuthor: TAuthor = await dispatch(
-				CreateAuthor({ author: newAuthor, token: token })
+				CreateAuthor(newAuthor)
 			).unwrap();
 
 			setAddedAuthors((prevValue) => {

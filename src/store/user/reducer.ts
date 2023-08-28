@@ -11,26 +11,36 @@ const initUsersState = {
 		isAuth: false,
 	},
 	isLoaded: false,
-} as { value: TUser | string[]; isLoaded: boolean };
+	isLoggedIn: false,
+} as { value: TUser | string[]; isLoaded: boolean; isLoggedIn: boolean };
 
 const usersReducer = createReducer(initUsersState, (builder) => {
 	builder
 		.addCase(Login.fulfilled, (state, action) => {
-			const user = { ...action.payload, isAuth: true };
 			localStorage.setItem('token', (action.payload as TUser).token);
-			state.value = user;
+			state = {
+				value: { ...action.payload, isAuth: true },
+				isLoggedIn: true,
+				isLoaded: false,
+			};
+			return state;
 		})
-		.addCase(Logout.fulfilled, (state) => {
+		.addCase(Logout.fulfilled, (state: typeof initUsersState) => {
 			localStorage.removeItem('token');
-			state.value = { ...initUsersState.value };
-			state.isLoaded = false;
+			state = {
+				value: { ...initUsersState.value },
+				isLoaded: false,
+				isLoggedIn: false,
+			};
+			return state;
 		})
 		.addCase(GetUser.fulfilled, (state: typeof initUsersState, payload) => {
-			state.isLoaded = true;
-			state.value = {
-				...payload.payload,
-				token: localStorage.getItem('token'),
+			state = {
+				value: { ...state.value, ...payload.payload },
+				isLoaded: true,
+				isLoggedIn: true,
 			};
+			return state;
 		});
 });
 
