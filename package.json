@@ -30,7 +30,7 @@
     "eslint:fix": "eslint --fix --ext .ts --ext .tsx src",
     "test:nowatch": "react-scripts test --watchAll=false",
     "prepare": "husky install",
-    "prepublish": "npm run eslint:fix",
+    "prepublish": "npm run eslint:fix && npm run test:nowatch",
     "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache"
   },
   "eslintConfig": {
@@ -67,6 +67,5 @@
     "jest": "^27.5.1",
     "prettier": "^3.0.1",
     "typescript": "^4"
-  },
-  "prepublish": "npm run eslint:fix && npm run test:nowatch"
+  }
 }

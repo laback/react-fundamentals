@@ -28,6 +28,6 @@ describe('CourseReducer', () => {
 			type: CreateCourse.fulfilled,
 			payload: response,
 		});
-		expect(newState.value).toEqual([response, []]);
+		expect(newState.value).toEqual([response]);
 	});
 });
