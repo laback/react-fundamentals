@@ -9,9 +9,9 @@ export const GetAuthors = createAsyncThunk<TAuthor[]>(
 	}
 );
 
-export const CreateAuthor = createAsyncThunk<
-	TAuthor,
-	{ author: TAuthor; token: string }
->('authors/create', async (input) => {
-	return await createAuthor(input);
-});
+export const CreateAuthor = createAsyncThunk<TAuthor, TAuthor>(
+	'authors/create',
+	async (author) => {
+		return await createAuthor(author);
+	}
+);

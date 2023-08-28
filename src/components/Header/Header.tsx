@@ -23,7 +23,7 @@ const Header = () => {
 	const loggedInUser: TUser = useSelector(getLoggedInUser);
 	const nav = useNavigate();
 	const onLogoutAction = async () => {
-		await dispatch(Logout(loggedInUser.token));
+		await dispatch(Logout());
 		nav('/login');
 	};
 	let right;

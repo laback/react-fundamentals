@@ -11,8 +11,9 @@ import {
 	getIsAuthorsLoaded,
 	getIsCoursesLoaded,
 } from 'src/store/selectors';
-import { useCourseById, useLoadFullData } from 'src/hooks';
+import { useCourseById } from 'src/hooks';
 import { TCourse } from 'src/shared.types';
+import { loadFullData } from 'src/helper';
 
 const buttonText = 'add new course';
 const buttonClass = 'add-button';
@@ -31,7 +32,7 @@ const Courses = () => {
 	const isCoursesLoaded = useSelector(getIsCoursesLoaded);
 	const isAuthorsLoaded = useSelector(getIsAuthorsLoaded);
 	useEffect(() => {
-		useLoadFullData(dispatch, isCoursesLoaded, isAuthorsLoaded);
+		loadFullData(dispatch, isCoursesLoaded, isAuthorsLoaded);
 	}, []);
 	const nav = useNavigate();
 	const onAddCourseAction = () => {

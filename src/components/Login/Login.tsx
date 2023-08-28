@@ -25,11 +25,11 @@ const Login = () => {
 	} = useForm();
 	const nav = useNavigate();
 	const onLogin = async (user) => {
-		try {
-			await dispatch(LoginAction(user));
+		const res = await dispatch(LoginAction(user));
+		if (res.meta.requestStatus === 'rejected') {
+			setRequestErrorMessage(res.payload.join('\n'));
+		} else {
 			nav('/courses');
-		} catch (rejectedValue) {
-			setRequestErrorMessage(rejectedValue);
 		}
 	};
 
