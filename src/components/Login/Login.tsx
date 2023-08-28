@@ -4,9 +4,7 @@ import { Input } from 'src/common/Input/Input';
 import { Label } from 'src/common/Label/Label';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { TUser } from 'src/shared.types';
 import { useDispatch } from 'react-redux';
-import { loginUser } from 'src/store/services';
 import { Login as LoginAction } from 'src/store/user/actions';
 
 const labelClass = 'login-form-label';
@@ -18,7 +16,7 @@ const inputClass = 'login-form-input';
 const buttonClass = 'login-form-button';
 
 const Login = () => {
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<any>();
 	const [requestErrorMessage, setRequestErrorMessage] = useState([]);
 	const {
 		register,
@@ -27,12 +25,10 @@ const Login = () => {
 	} = useForm();
 	const nav = useNavigate();
 	const onLogin = async (user) => {
-		const result = await loginUser(user);
-		if (Array.isArray(result)) {
-			setRequestErrorMessage(result);
+		const res = await dispatch(LoginAction(user));
+		if (res.meta.requestStatus === 'rejected') {
+			setRequestErrorMessage(res.payload.join('\n'));
 		} else {
-			dispatch(LoginAction(result as TUser));
-			setRequestErrorMessage(undefined);
 			nav('/courses');
 		}
 	};

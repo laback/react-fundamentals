@@ -3,10 +3,9 @@ import { Button } from 'src/common/Button/Button';
 import { AuthorItem } from '../AuthorItem/AuthorItem';
 import { Label } from 'src/common/Label/Label';
 import { Input } from 'src/common/Input/Input';
-import { v4 as uuid } from 'uuid';
 import { TAuthor } from 'src/shared.types';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAuthors } from 'src/store/selectors';
+import { getAuthors, getToken } from 'src/store/selectors';
 import { CreateAuthor } from 'src/store/author/actions';
 
 const buttonClass = 'edit-create-course-button';
@@ -17,8 +16,9 @@ const inputClass = 'edit-create-course-form-input';
 const placeholder = 'Input text';
 
 const AuthorInputs = ({ addedAuthors, setAddedAuthors }) => {
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<any>();
 	const authors = useSelector(getAuthors);
+	const token = useSelector(getToken);
 
 	const [authorName, setAuthorName] = useState('');
 	const [errorMessage, setErrorMessage] = useState(undefined);
@@ -27,26 +27,28 @@ const AuthorInputs = ({ addedAuthors, setAddedAuthors }) => {
 		setAuthorName(event.target.value);
 	};
 
-	const onCreateAuthorClick = () => {
+	const onCreateAuthorClick = async () => {
 		if (authorName.length < 2) {
 			setErrorMessage('Author name should contains at least 2 characters');
 		} else {
 			setErrorMessage(undefined);
 			const newAuthor: TAuthor = {
-				id: uuid(),
 				name: authorName,
 			};
 			setAuthorName('');
+			const addedAuthor: TAuthor = await dispatch(
+				CreateAuthor(newAuthor)
+			).unwrap();
+
 			setAddedAuthors((prevValue) => {
-				return [...prevValue, newAuthor];
+				return [...prevValue, addedAuthor];
 			});
-			dispatch(CreateAuthor(newAuthor));
 		}
 	};
 
 	const onDeleteAuthorAction = (authorId: string) => {
 		setAddedAuthors((prevValue: TAuthor[]) => {
-			return prevValue.filter((author) => !(author.id != authorId));
+			return prevValue.filter((author) => author.id != authorId);
 		});
 	};
 

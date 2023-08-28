@@ -1,26 +1,46 @@
 import { TUser } from 'src/shared.types';
-import { Login, Logout } from './actions';
+import { GetUser, Login, Logout } from './actions';
 import { createReducer } from '@reduxjs/toolkit';
 
 const initUsersState = {
-	value: JSON.parse(localStorage.getItem('user')),
-} as { value: TUser };
+	value: {
+		email: '',
+		name: '',
+		token: '',
+		role: '',
+		isAuth: false,
+	},
+	isLoaded: false,
+	isLoggedIn: false,
+} as { value: TUser | string[]; isLoaded: boolean; isLoggedIn: boolean };
 
 const usersReducer = createReducer(initUsersState, (builder) => {
 	builder
-		.addCase(Login, (state, action) => {
-			localStorage.setItem('user', JSON.stringify(action.payload));
-			state.value = action.payload;
-		})
-		.addCase(Logout, (state) => {
-			const logoutUser: TUser = {
-				email: '',
-				name: '',
-				token: '',
-				isAuth: false,
+		.addCase(Login.fulfilled, (state, action) => {
+			localStorage.setItem('token', (action.payload as TUser).token);
+			state = {
+				value: { ...action.payload, isAuth: true },
+				isLoggedIn: true,
+				isLoaded: false,
 			};
-			localStorage.removeItem('user');
-			state.value = logoutUser;
+			return state;
+		})
+		.addCase(Logout.fulfilled, (state: typeof initUsersState) => {
+			localStorage.removeItem('token');
+			state = {
+				value: { ...initUsersState.value },
+				isLoaded: false,
+				isLoggedIn: false,
+			};
+			return state;
+		})
+		.addCase(GetUser.fulfilled, (state: typeof initUsersState, payload) => {
+			state = {
+				value: { ...state.value, ...payload.payload },
+				isLoaded: true,
+				isLoggedIn: true,
+			};
+			return state;
 		});
 });
 

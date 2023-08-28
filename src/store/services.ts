@@ -5,10 +5,12 @@ async function doPost(params: {
 	payload: object;
 }): Promise<TServerReturn> {
 	const { url, payload } = params;
+	const token = localStorage.getItem('token');
 	const response = await fetch(url, {
 		method: 'POST',
 		body: JSON.stringify(payload),
 		headers: {
+			Authorization: token,
 			'Content-Type': 'application/json',
 		},
 	});
@@ -17,8 +19,47 @@ async function doPost(params: {
 
 async function doGet(params: { url: string }): Promise<TServerReturn> {
 	const { url } = params;
+	const token = localStorage.getItem('token');
+	let headers = {};
+	if (token) {
+		headers = {
+			Authorization: token,
+			'Content-Type': 'application/json',
+		};
+	} else {
+		headers = {
+			'Content-Type': 'application/json',
+		};
+	}
 	const response = await fetch(url, {
+		headers: headers,
+	});
+	return (await response.json()) as TServerReturn;
+}
+
+async function doDelete(params: { url: string }): Promise<void> {
+	const { url } = params;
+	const token = localStorage.getItem('token');
+	await fetch(url, {
+		method: 'Delete',
 		headers: {
+			Authorization: token,
+			'Content-Type': 'application/json',
+		},
+	});
+}
+
+async function doPut(params: {
+	url: string;
+	payload: object;
+}): Promise<TServerReturn> {
+	const token = localStorage.getItem('token');
+	const { url, payload } = params;
+	const response = await fetch(url, {
+		method: 'Put',
+		body: JSON.stringify(payload),
+		headers: {
+			Authorization: token,
 			'Content-Type': 'application/json',
 		},
 	});
@@ -40,7 +81,11 @@ export async function loginUser(userData): Promise<TUser | string[]> {
 		};
 		return loggedInUser;
 	} else {
-		return errors;
+		if (errors) {
+			return errors;
+		} else {
+			return [result];
+		}
 	}
 }
 
@@ -55,6 +100,20 @@ export async function registerUser(user): Promise<void | string[]> {
 	}
 }
 
+export async function logoutUser(): Promise<void> {
+	await doDelete({
+		url: 'http://localhost:4000/logout',
+	});
+}
+
+export async function getUser(): Promise<TUser> {
+	const { result } = await doGet({
+		url: 'http://localhost:4000/users/me',
+	});
+
+	return result as TUser;
+}
+
 export async function getCourses(): Promise<TCourse[]> {
 	const { result } = await doGet({
 		url: 'http://localhost:4000/courses/all',
@@ -66,6 +125,29 @@ export async function getCourses(): Promise<TCourse[]> {
 	return courses;
 }
 
+export async function createCourse(course: TCourse): Promise<TCourse> {
+	const { result } = await doPost({
+		url: 'http://localhost:4000/courses/add',
+		payload: course,
+	});
+	return result as TCourse;
+}
+
+export async function deleteCourse(courseId: string): Promise<string> {
+	await doDelete({
+		url: 'http://localhost:4000/courses/' + courseId,
+	});
+	return courseId;
+}
+
+export async function updateCourse(course: TCourse): Promise<TCourse> {
+	const { result } = await doPut({
+		url: 'http://localhost:4000/courses/' + course.id,
+		payload: course,
+	});
+	return result as TCourse;
+}
+
 export async function getAuthors(): Promise<TAuthor[]> {
 	const { result } = await doGet({
 		url: 'http://localhost:4000/authors/all',
@@ -75,4 +157,12 @@ export async function getAuthors(): Promise<TAuthor[]> {
 		return author as TAuthor;
 	});
 	return authors;
+}
+
+export async function createAuthor(author: TAuthor): Promise<TAuthor> {
+	const { result } = await doPost({
+		url: 'http://localhost:4000/authors/add',
+		payload: author,
+	});
+	return result as TAuthor;
 }

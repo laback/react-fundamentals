@@ -7,7 +7,12 @@ import { TCourse } from 'src/shared.types';
 import { useDispatch, useSelector } from 'react-redux';
 import { DeleteCourse } from 'src/store/course/actions';
 import { useCourseById } from 'src/hooks';
-import { getCourses, getAuthors } from 'src/store/selectors';
+import {
+	getCourses,
+	getAuthors,
+	getToken,
+	getIsAdmin,
+} from 'src/store/selectors';
 
 const showButtonClass = 'show-button';
 const showButtonText = 'show course';
@@ -21,13 +26,17 @@ const CourseCard = ({ courseId }) => {
 
 	const courses = useSelector(getCourses);
 	const authors = useSelector(getAuthors);
+	const isAdmin = useSelector(getIsAdmin);
 	const course: TCourse = useCourseById(courseId, courses, authors);
 	const nav = useNavigate();
 	const onShowCourseAction = () => {
-		nav(course.id);
+		nav(courseId);
 	};
-	const onDeleteCourseAction = () => {
-		dispatch(DeleteCourse(courseId));
+	const onEditCourseAction = () => {
+		nav('/courses/update/' + courseId);
+	};
+	const onDeleteCourseAction = async () => {
+		await dispatch(DeleteCourse(courseId));
 	};
 	if (course) {
 		return (
@@ -54,11 +63,20 @@ const CourseCard = ({ courseId }) => {
 							onClick={() => onShowCourseAction()}
 							text={showButtonText}
 						/>
-						<Button
-							className={trashButtonClass}
-							onClick={() => onDeleteCourseAction()}
-						/>
-						<Button className={editButtonClass} />
+						{isAdmin ? (
+							<>
+								<Button
+									className={trashButtonClass}
+									onClick={() => onDeleteCourseAction()}
+								/>
+								<Button
+									className={editButtonClass}
+									onClick={() => onEditCourseAction()}
+								/>
+							</>
+						) : (
+							<></>
+						)}
 					</div>
 				</div>
 			</div>
