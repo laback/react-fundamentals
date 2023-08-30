@@ -14,6 +14,8 @@ async function doPost(params: {
 			'Content-Type': 'application/json',
 		},
 	});
+	const json = await response.json();
+	const a = 1;
 	return (await response.json()) as TServerReturn;
 }
 
@@ -130,6 +132,7 @@ export async function createCourse(course: TCourse): Promise<TCourse> {
 		url: 'http://localhost:4000/courses/add',
 		payload: course,
 	});
+	console.log(result);
 	return result as TCourse;
 }
 

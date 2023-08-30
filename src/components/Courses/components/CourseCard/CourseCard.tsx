@@ -40,7 +40,7 @@ const CourseCard = ({ courseId }) => {
 	};
 	if (course) {
 		return (
-			<div className='course-card'>
+			<div className='course-card' data-testid='course-card'>
 				<div className='course-card-left'>
 					<div className='course-card-left-title'>{course.title}</div>
 					<div className='course-card-left-descr'>{course.description}</div>
